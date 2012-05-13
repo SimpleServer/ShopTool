@@ -56,4 +56,34 @@ public class PriceListItem implements PriceListItemInterface {
     public int stockUpdateTime() {
         return stockUpdateTime();
     }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setMaxStock(int maxStock) {
+        this.maxStock = maxStock;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setNormalStock(int normalStock) {
+        this.normalStock = normalStock;
+    }
+
+    public void setPriceBuy(int priceBuy) {
+        this.priceBuy = priceBuy;
+    }
+
+    public void setPriceSell(int priceSell) {
+        this.priceSell = priceSell;
+    }
+
+    public void setStockUpdateTime(int stockUpdateTime) {
+        this.stockUpdateTime = stockUpdateTime;
+    }
+    
+    
 }

@@ -18,12 +18,29 @@ import java.util.logging.Logger;
 public class Generator {
     
     private final static String extension = "pricelist";
+    private final static String ID = "ID";
+    private final static String NAME = "NAME";
+    private final static String PRICE = "PRICE";
+    private final static String NORMAL = "N";
+    private final static String MAX = "MAX";
+    private final static String TIME = "TIME";
+    private final static String seperator = " ";
+    private final static String assign = "=";
+    
+    private final static int DEFAULT_ID = 0;
+    private final static int DEFAULT_MAXSTOCK = 0;
+    private final static int DEFAULT_NORMALSTOCK = 0;
+    private final static int DEFAULT_PRICE_BUY = 0;
+    private final static int DEFAULT_PRICE_SELL = 0;
+    private final static int DEFAULT_TIME = 0;
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        log(extract("NAME=Test SELL=5 PRICE=120", PRICE));
+        log(extract("NAME=Test SELL=5 PRICE=120", NAME));
+        log(extract("NAME=Test SELL=5 PRICE=120", "SELL"));
     }
     
     public static LinkedList<ShopType> getShops(File dir) {
@@ -45,7 +62,6 @@ public class Generator {
                 shops.removeFirst();
         }
         
-        //TODO implement
         return shops;
     }
     
@@ -64,6 +80,7 @@ public class Generator {
         } catch (IOException ex) {
             Logger.getLogger(Generator.class.getName()).log(Level.SEVERE, null, ex);
         }
+        shop.recalcPrices();
         return shop;
     }
     
@@ -89,9 +106,43 @@ public class Generator {
     
     private static PriceListItem parseLine(String line) {
         PriceListItem item = new PriceListItem();
-        //TODO implement
-        //NOTE: code optional!
+        item.setName(extract(line, NAME));
+        item.setId(extract(line, ID));
+        
+        try {item.setMaxStock(Integer.parseInt(extract(line, MAX)));}
+            catch(Exception e) {item.setMaxStock(DEFAULT_MAXSTOCK);}
+        
+        try {item.setNormalStock(Integer.parseInt(extract(line, NORMAL)));}
+            catch(Exception e) {item.setNormalStock(DEFAULT_NORMALSTOCK);}
+        
+        try {item.setPriceBuy(Integer.parseInt(extract(line, PRICE)));}
+            catch(Exception e) {item.setPriceBuy(DEFAULT_PRICE_BUY);}
+        
+        try {item.setPriceSell(Integer.parseInt(extract(line, PRICE)));}
+            catch(Exception e) {item.setPriceSell(DEFAULT_PRICE_SELL);}
+        
+        try {item.setStockUpdateTime(Integer.parseInt(extract(line, TIME)));}
+            catch(Exception e) {item.setStockUpdateTime(DEFAULT_TIME);}
+        
         return item;
+    }
+    
+    private static String extract(String line, String key) {
+        int i = line.indexOf(key);
+        int end = line.indexOf(seperator, i);
+        if (end == -1)
+            end = line.length();
+        return line.substring(line.indexOf(assign, i)+1, end);
+    }
+    
+    private static int extractInt(String line, String key) throws Exception {
+        try {
+            return Integer.parseInt(extract(line, key));
+        } catch(NumberFormatException e) {
+            warn("Value of key " + key + " in " + line
+                    + " should be Integer - using default.");
+            throw new Exception();
+        }
     }
     
     private static BufferedReader getReader(File file) {
@@ -111,5 +162,9 @@ public class Generator {
     
     public static void warn(Object o) {
         log("[WARNING] " + o);
+    }
+    
+    public static void err(Object o) {
+        log("[ERROR] " + o);
     }
 }
