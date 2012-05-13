@@ -20,6 +20,8 @@ public class Generator {
     private final static String extension = "pricelist";
     private final static String ID = "ID";
     private final static String NAME = "NAME";
+    private final static String INTEREST_BUY = "NAME";
+    private final static String INTEREST_SELL = "NAME";
     private final static String PRICE = "PRICE";
     private final static String NORMAL = "N";
     private final static String MAX = "MAX";
@@ -28,6 +30,8 @@ public class Generator {
     private final static String assign = "=";
     
     private final static int DEFAULT_ID = 0;
+    private final static double DEFAULT_INTEREST_BUY = 0;
+    private final static double DEFAULT_INTEREST_SELL = 0;
     private final static int DEFAULT_MAXSTOCK = 0;
     private final static int DEFAULT_NORMALSTOCK = 0;
     private final static int DEFAULT_PRICE_BUY = 0;
@@ -75,8 +79,17 @@ public class Generator {
         ShopType shop = null;
         try {
             reader = getReader(file);
-            shop = new ShopType(reader.readLine()); //first line is name
-            shop.setPricelist(getPriceListFromReader(reader)); //rest is pricelist
+            shop = new ShopType();
+            //first line: name
+            shop.setName(extract(reader.readLine(), NAME));
+            //second line: interest buy
+            try {shop.setInterestBuy(extractDouble(reader.readLine(), INTEREST_BUY));}
+                catch(Exception e) {shop.setInterestBuy(DEFAULT_INTEREST_BUY);}
+            //third line: interest sell
+            try {shop.setInterestSell(extractDouble(reader.readLine(), INTEREST_SELL));}
+                catch(Exception e) {shop.setInterestSell(DEFAULT_INTEREST_SELL);}
+            //rest is the pricelist
+            shop.setPricelist(getPriceListFromReader(reader));
         } catch (IOException ex) {
             Logger.getLogger(Generator.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -140,7 +153,17 @@ public class Generator {
             return Integer.parseInt(extract(line, key));
         } catch(NumberFormatException e) {
             warn("Value of key " + key + " in " + line
-                    + " should be Integer - using default.");
+                    + " should be Integer - using default value.");
+            throw new Exception();
+        }
+    }
+    
+    private static double extractDouble(String line, String key) throws Exception {
+        try {
+            return Double.parseDouble(extract(line, key));
+        } catch(NumberFormatException e) {
+            warn("Value of key " + key + " in " + line
+                    + " should be Double - using default value.");
             throw new Exception();
         }
     }
