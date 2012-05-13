@@ -14,7 +14,7 @@ import java.util.LinkedList;
  * @author Felix Wiemuth
  */
 public class PriceList implements PriceListInterface {
-    LinkedList<PriceListItem> items;
+    LinkedList<PriceListItem> items = new LinkedList<PriceListItem>();
     
     @Override
     public Iterator<PriceListItem> iterator() {

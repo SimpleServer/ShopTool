@@ -30,7 +30,7 @@ public class ShopType implements ShopTypeInterface {
         while (it.hasNext()) {
             PriceListItem item = it.next();
             item.setPriceBuy( (int) Math.ceil(item.priceBuy() + item.priceBuy()*interestBuy) );
-            item.setPriceSell( (int) Math.floor(item.priceSell() + item.priceSell()*interestSell) );
+            item.setPriceSell( (int) Math.floor(item.priceSell() - item.priceSell()*interestSell) );
         }
     }
     

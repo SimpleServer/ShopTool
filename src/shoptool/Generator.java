@@ -20,10 +20,10 @@ public class Generator {
     private final static String extension = "pricelist";
     private final static String ID = "ID";
     private final static String NAME = "NAME";
-    private final static String INTEREST_BUY = "NAME";
-    private final static String INTEREST_SELL = "NAME";
+    private final static String INTEREST_BUY = "INTEREST_BUY";
+    private final static String INTEREST_SELL = "INTEREST_SELL";
     private final static String PRICE = "PRICE";
-    private final static String NORMAL = "N";
+    private final static String NORMAL = "NORMAL";
     private final static String MAX = "MAX";
     private final static String TIME = "TIME";
     private final static String seperator = " ";
@@ -42,6 +42,7 @@ public class Generator {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        ShopType shop = getShopFromFile(new File("ShopListExample2"));
         log(extract("NAME=Test SELL=5 PRICE=120", PRICE));
         log(extract("NAME=Test SELL=5 PRICE=120", NAME));
         log(extract("NAME=Test SELL=5 PRICE=120", "SELL"));
@@ -108,7 +109,11 @@ public class Generator {
             }
             if (line == null)
                 break;
-            pricelist.addItem(parseLine(line));
+            try {
+                pricelist.addItem(parseLine(line));
+            } catch (NullPointerException e) {
+                err("Line '" + line + "' could not be parsed!");
+            }
         }
         return pricelist;
     }
