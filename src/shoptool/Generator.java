@@ -4,7 +4,7 @@
  * See LICENSE or http://www.gnu.org/licenses/gpl.txt *
  ******************************************************/
 
-package sstool;
+package shoptool;
 
 import java.io.*;
 import java.util.LinkedList;
@@ -13,7 +13,7 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author felix
+ * @author Felix Wiemuth
  */
 public class Generator {
     
@@ -24,35 +24,6 @@ public class Generator {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-    }
-    
-    public static PriceListElement parseLine(String line) {
-        PriceListElement item = new PriceListElement();
-        //TODO implement
-        return item;
-    }
-    
-    public static ShopType getShopFromFile(File file) {
-        ShopType shop = new ShopType();
-        try {
-            FileReader input = new FileReader(file);
-            BufferedReader bufRead = new BufferedReader(input);
-            String line;
-            while(true) {
-                line = bufRead.readLine();
-                if (line == null)
-                    break;
-                shop.addItem(parseLine(line));
-                
-            }
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(Generator.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            //I/O error
-        }
-        
-        //TODO implement
-        return shop;
     }
     
     public static LinkedList<ShopType> getShops(File dir) {
@@ -76,6 +47,62 @@ public class Generator {
         
         //TODO implement
         return shops;
+    }
+    
+    private static PriceList loadBasePriceList(File file) {
+        BufferedReader reader = getReader(file);
+        return getPriceListFromReader(reader);
+    }
+    
+    private static ShopType getShopFromFile(File file) {
+        BufferedReader reader;
+        ShopType shop = null;
+        try {
+            reader = getReader(file);
+            shop = new ShopType(reader.readLine()); //first line is name
+            shop.setPricelist(getPriceListFromReader(reader)); //rest is pricelist
+        } catch (IOException ex) {
+            Logger.getLogger(Generator.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return shop;
+    }
+    
+    private static PriceList getPriceListFromReader(BufferedReader reader) {
+        PriceList pricelist = new PriceList();
+        String line = null;
+        while(true) {
+            try {
+                line = reader.readLine();
+            } catch (IOException ex) {
+                Logger.getLogger(Generator.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            if (line == null)
+                break;
+            pricelist.addItem(parseLine(line));
+        }
+        return pricelist;
+    }
+    
+    private static PriceList getPriceListFromFile(File file) {
+        return getPriceListFromReader(getReader(file));
+    }
+    
+    private static PriceListItem parseLine(String line) {
+        PriceListItem item = new PriceListItem();
+        //TODO implement
+        //NOTE: code optional!
+        return item;
+    }
+    
+    private static BufferedReader getReader(File file) {
+        FileReader input = null;
+        try {
+            input = new FileReader(file);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Generator.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        BufferedReader bufRead = new BufferedReader(input);
+        return bufRead;
     }
     
     public static void log(Object o) {

@@ -1,15 +1,21 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-package sstool;
+/******************************************************
+ * Copyright (C) 2012 Felix Wiemuth                   *
+ * Licensed under the GNU GENERAL PUBLIC LICENSE      *
+ * See LICENSE or http://www.gnu.org/licenses/gpl.txt *
+ ******************************************************/
 
-import java.util.HashMap;
+package shoptool;
+
+import java.util.Iterator;
 
 /**
  *
- * @author felix
+ * @author Felix Wiemuth
  */
-interface PriceListInterface {
-    HashMap<Integer, Integer> getPrices();
+public interface PriceListInterface {
+    /**
+     * Get an iterator over the items in the pricelist.
+     * @return 
+     */
+    public Iterator<PriceListItem> iterator();
 }

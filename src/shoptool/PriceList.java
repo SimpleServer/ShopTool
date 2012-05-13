@@ -4,29 +4,24 @@
  * See LICENSE or http://www.gnu.org/licenses/gpl.txt *
  ******************************************************/
 
-package sstool;
+package shoptool;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 
 /**
  * 
- * @author felix
+ * @author Felix Wiemuth
  */
 public class PriceList implements PriceListInterface {
-    LinkedList<PriceListElement> items;
-
-    @Override
-    public HashMap<Integer, Integer> getPrices() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
+    LinkedList<PriceListItem> items;
     
-    public Iterator iterator() {
+    @Override
+    public Iterator<PriceListItem> iterator() {
         return items.iterator();
     }
 
-    void addItem(PriceListElement item) {
+    void addItem(PriceListItem item) {
         items.add(item);
     }
     

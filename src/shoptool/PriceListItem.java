@@ -4,32 +4,56 @@
  * See LICENSE or http://www.gnu.org/licenses/gpl.txt *
  ******************************************************/
 
-package sstool;
+package shoptool;
 
 /**
  *
- * @author felix
+ * @author Felix Wiemuth
  */
-public class PriceListElement {
+public class PriceListItem implements PriceListItemInterface {
     private String id; //minecraft block id
     private String name; //minecraft block name
-    private int price; //pricein relation to base value 10
-    private String code; //SimpleServer event scripting code to calculate stock refill per time period
+    //prices in relation to base value 10
+    private int priceSell;
+    private int priceBuy;
+    private int stockUpdateTime; //time in seconds the current stock is changed by one item towards 'normalStock'
+    private int normalStock; //amount of items the store tries to have
+    private int maxStock; //the maximum amount of items the store can keep
+//    private String code;
+//    private static String codeDefault;
     
+    @Override
     public String id() {
         return id;
     }
     
+    @Override
     public String name() {
         return name;
     }
     
-    public int price() {
-        return price;
+    @Override
+    public int priceSell() {
+        return priceSell;
     }
-    
-    public String code() {
-        return code;
+
+    @Override
+    public int priceBuy() {
+        return priceBuy;
     }
-    
+
+    @Override
+    public int normalStock() {
+        return normalStock();
+    }
+
+    @Override
+    public int maxStock() {
+        return maxStock();
+    }
+
+    @Override
+    public int stockUpdateTime() {
+        return stockUpdateTime();
+    }
 }
