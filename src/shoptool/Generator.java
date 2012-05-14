@@ -42,14 +42,14 @@ public class Generator {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        ShopType shop = getShopFromFile(new File("ShopListExample2"));
+        Shop shop = getShopFromFile(new File("ShopListExample2"));
         log(extract("NAME=Test SELL=5 PRICE=120", PRICE));
         log(extract("NAME=Test SELL=5 PRICE=120", NAME));
         log(extract("NAME=Test SELL=5 PRICE=120", "SELL"));
     }
     
-    public static LinkedList<ShopType> getShops(File dir) {
-        LinkedList<ShopType> shops = new LinkedList<ShopType>();
+    public static LinkedList<Shop> getShops(File dir) {
+        LinkedList<Shop> shops = new LinkedList<Shop>();
         
         File[] files = dir.listFiles(new FileFilter() {
             @Override
@@ -75,12 +75,12 @@ public class Generator {
         return getPriceListFromReader(reader);
     }
     
-    private static ShopType getShopFromFile(File file) {
+    private static Shop getShopFromFile(File file) {
         BufferedReader reader;
-        ShopType shop = null;
+        Shop shop = null;
         try {
             reader = getReader(file);
-            shop = new ShopType();
+            shop = new Shop();
             //first line: name
             shop.setName(extract(reader.readLine(), NAME));
             //second line: interest buy
