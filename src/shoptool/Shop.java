@@ -12,7 +12,7 @@ import java.util.Iterator;
  *
  * @author Felix Wiemuth
  */
-public class ShopType implements ShopTypeInterface {
+public class Shop implements ShopInterface {
     private String name;
     private PriceList pricelist;
     private double interestBuy;

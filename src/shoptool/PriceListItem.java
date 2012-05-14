@@ -44,17 +44,17 @@ public class PriceListItem implements PriceListItemInterface {
 
     @Override
     public int normalStock() {
-        return normalStock();
+        return normalStock;
     }
 
     @Override
     public int maxStock() {
-        return maxStock();
+        return maxStock;
     }
 
     @Override
     public int stockUpdateTime() {
-        return stockUpdateTime();
+        return stockUpdateTime;
     }
 
     public void setId(String id) {

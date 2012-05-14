@@ -1,0 +1,322 @@
+<!-- Required static additions -->
+    <command name="balance" allow="1+" event="storeCreditsCmd"/>
+    <command name="buy" allow="1+" event="storeBuy"/>
+
+    <event name="onServerStart">
+        run storeBotsInit
+    </event>
+    <event name="storeBotsInit">
+        sleep 3000
+        print "Initializing stores..."
+
+        set '#i 0
+        while #i $store_areas Asize lt
+          set '#area $store_areas #i Aget
+          set '#botname $store_areaBots #area Hget
+          set '#x '#y '#z to $store_botCoords #botname Hget Aexplode
+
+          npc #botname storeBot #x #y #z
+
+          inc '#i
+        endwhile
+    </event>
+    <event name="storeBotsShutdown">
+        print "Shutting down stores..."
+
+        set '#i 0
+        while #i $store_areas Asize lt
+          set '#area $store_areas #i Aget
+          set '#botname $store_areaBots #area Hget
+
+          npckill #botname
+
+          inc '#i
+        endwhile
+    </event>
+
+    <event name="storeEnter">
+        set '#storename #POP
+        push #GRAY "(wait for NPC to pickup before throwing more)" .
+        push #GRAY "Sell items by throwing them on the NPC" .
+        push #GRAY "Buy items with the /buy command" .
+        push #BLUE "Welcome to" . #CYAN .. #storename . #BLUE . "!" .
+        say #PLAYER #POP
+        say #PLAYER #POP
+        say #PLAYER #POP
+        say #PLAYER #POP
+    </event>
+    <event name="storeLeave">
+        push #BLUE "Thank you for your visit!" .
+        say #PLAYER #POP
+    </event>
+
+    <event name="storeCreditsCmd">
+        set '#arg #POP
+        set '#dest #POP
+        set '#val #POP
+
+        if $store_playerBalances #PLAYER Hcontainskey not
+          set '$store_playerBalances $store_playerBalances #PLAYER 0 Hput
+        endif
+
+        if #arg null eq
+          push #GRAY "Your current balance is:" . #WHITE . $store_playerBalances #PLAYER Hget .. "Credits" ..
+          say #PLAYER #POP
+          return
+        endif
+
+        if #arg "transfer" eq not
+          push GRAY "/credits transfer PLAYER VALUE" .
+          push #GRAY "/credits" .
+          push #GRAY "Usage:" .
+          say #PLAYER #POP
+          say #PLAYER #POP
+          say #PLAYER #POP
+          return
+        endif
+
+        if getplayers #dest Acontains not
+          push #RED "Player not online!" .
+          say #PLAYER #POP
+          return
+        endif
+        
+        if $store_playerBalances #dest Hcontainskey not
+          set '$store_playerBalances $store_playerBalances #dest 0 Hput
+        endif
+        
+        if #val 0 gt not
+          push #RED "Invalid amount!" .
+          say #PLAYER #POP
+          return
+        endif
+
+        if #val $store_playerBalances #PLAYER Hget gt
+          push #RED "You have not enough Credits!" .
+          say #PLAYER #POP
+          return
+        endif
+        
+        set '#newsrc '#newdest to $store_playerBalances #PLAYER Hget $store_playerBalances #dest Hget
+        set '#newsrc #newsrc #val -
+        set '#newdest #newdest #val +
+        set '$store_playerBalance $store_playerBalance #PLAYER #newsrc Hput #dest #newdest Hput
+
+        push #GREEN #val . "Credits transferred to" .. #dest ..
+        say #PLAYER #POP
+        push #GREEN #val . "Credits received from" .. #PLAYER ..
+        say #dest #POP
+    </event>
+    <event name="storeBuy">
+        set '#i 0
+        while #i $store_areas Asize lt
+          set '#area $store_areas #i Aget
+          if #PLAYER #area isinarea
+            break
+          endif
+
+          set '#area null
+          inc '#i
+        endwhile
+
+        if #area null eq
+          push #RED "Go to a store!" .
+          say #PLAYER #POP
+          return
+        endif
+
+        set '#buylist $store_listBuy #area Hget
+        set '#stockconf $store_stockConf #area Hget
+        set '#stocklist $store_listStock #area Hget
+        
+        set '#timepassed #CURRTIME $store_lastVisit #area Hget -
+        set '$store_lastVisit $store_lastVisit #area #CURRTIME Hput
+
+        set '#keys #stocklist Hkeys
+        set '#i 0
+        while #i #keys Asize lt
+          set '#key #keys #i Aget
+          set '#onstock #stocklist #key Hget
+          set '#max '#refill '#interval to #stockconf #key Hget Aexplode
+
+          if #onstock #refill eq
+            inc '#i
+            continue
+          endif
+
+          set '#supply #timepassed #interval /
+          set '#required #refill #onstock -
+          if #required 0 gt
+            if #supply #required gt
+              set '#onstock #onstock #required +
+            else
+              set '#onstock #onstock #supply +
+            endif
+          else
+            if #supply #required -1 * gt
+              set '#onstock #onstock #required +
+            else
+              set '#onstock #onstock #supply -1 * +
+            endif
+          endif
+          set '#stocklist #stocklist #key #onstock Hput
+          
+          inc '#i
+        endwhile
+        set '$store_listStock $store_listStock #area #stocklist Hput
+
+        set '#item #POP
+        set '#count #POP
+
+        if #count null eq
+          set '#count 1
+        endif
+
+        if #item null eq
+          push #GRAY "/buy item [count]" .
+          push #GRAY "/buy list" .
+          push #GRAY "Usage:" .
+          say #PLAYER #POP
+          say #PLAYER #POP
+          say #PLAYER #POP
+          return
+        endif
+
+
+        if #item "list" eq
+          set '#keys #buylist Hkeys
+          
+          push #GRAY "Price list:" .
+          say #PLAYER #POP
+
+          set '#i 0
+          while #i #keys Asize lt
+            set '#key #keys #i Aget
+            set '#price #buylist #key Hget
+            set '#onstock #stocklist #key Hget
+            set '#max '#refill '#interval to #stockconf #key Hget Aexplode
+
+            push #YELLOW #key getitemalias . #GRAY . "(" .. #onstock . "of" .. #max .. ")" . " : " . #WHITE . #price . "Credits" ..
+            say #PLAYER #POP
+
+            inc '#i
+          endwhile
+          execcmd credits
+          return
+        endif
+
+        if #item int 0 eq
+          set '#item #item getitemid
+          if #item null eq
+            push #RED "Could not find an item with this name!" .
+            say #PLAYER #POP
+            return
+          endif
+        endif
+
+        if #keys #item Acontains not
+          push #RED "This shop does not sell this item!" .
+          say #PLAYER #POP
+          return
+        endif
+
+        if #count #stocklist #item Hget gt
+          push #RED "This shop does not have as much as you want! Come back later!" .
+          say #PLAYER #POP
+          return
+        endif
+
+        set '#playerbalance $store_playerBalances #PLAYER Hget
+        set '#pricesum #buylist #item Hget #count *
+
+        if #playerbalance #pricesum lt
+          push #RED "You have not enough Credits!" .
+          say #PLAYER #POP
+          return
+        endif 
+
+        set '#stocklist #stocklist #item #stocklist #item Hget #count - Hput
+        set '#playerbalance #playerbalance #pricesum -
+
+        set '$store_playerBalances $store_playerBalances #PLAYER #playerbalance Hput
+        set '$store_listStock $store_listStock #area #stocklist Hput
+
+        execcmd give #item #count
+        execcmd credits
+    </event>
+
+    <event name="storeBot">
+      set '#botname #POP
+      set '#trigger #POP
+
+      if #trigger "collect" eq
+        if #PLAYER null eq
+          return
+        endif
+
+        set '#id #POP
+        set '#cnt #POP
+        set '#dat #POP
+
+        if #dat int 0 eq not
+          set '#id #id ":" . #dat .
+        endif
+        
+        set '#i 0
+        while #i $store_areas Asize lt
+          set '#area $store_areas #i Aget
+          if #PLAYER #area isinarea
+            break
+          endif
+
+          set '#area null
+          inc '#i
+        endwhile
+
+        if #area null eq
+          return
+        endif
+
+        push #GRAY Got . #cnt .. of .. #id getitemalias .. "!" .
+        say #PLAYER #POP
+
+        set '#selllist $store_listSell #area Hget
+        set '#stockconf $store_stockConf #area Hget        
+        set '#stocklist $store_listStock #area Hget
+        set '#keys #selllist Hkeys
+
+        if #keys #id Acontains not
+          push #RED "This shop does not buy this item!" .
+          say #PLAYER #POP
+          push #id ":" . #dat .
+          execcmd give #POP #cnt
+          return
+        endif
+
+        set '#max '#refill '#interval to #stockconf #id Hget Aexplode
+        set '#hypo #stocklist #id Hget #cnt +
+        if #cnt #stocklist #id Hget + #max gt
+          push #RED "This shop can not buy so much now! Come back later!" .
+          say #PLAYER #POP
+          push #id ":" . #dat .
+          execcmd give #POP #cnt
+          return
+        endif
+
+        set '#playerbalance $store_playerBalances #PLAYER Hget
+        set '#pricesum #selllist #id Hget #cnt *
+        
+        set '#stocklist #stocklist #id #stocklist #id Hget #cnt + Hput
+        set '#playerbalance #playerbalance #pricesum +
+
+        set '$store_playerBalances $store_playerBalances #PLAYER #playerbalance Hput
+        set '$store_listStock $store_listStock #area #stocklist Hput
+
+        execcmd credits
+        return
+      endif
+    </event>
+
+    <event name="store_lastVisit" />
+    <event name="store_playerBalances" />
+
