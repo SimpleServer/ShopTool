@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 
 /**
- * 
+ *
  * @author Anton Pirogov
  */
 public class EventGenerator {
@@ -115,7 +115,7 @@ public class EventGenerator {
 			content += "        <area name=\"" + shopname;
 			content += "\" start=\"" + startcoord + "\" end=\"" + endcoord
 					+ "\" ";
-			content += "onenter=\"storeEnter\" onleave=\"storeLeave\" />\n";
+			content += "event=\"storeArea\" />\n";
 		}
 
 		return open + content + close;
