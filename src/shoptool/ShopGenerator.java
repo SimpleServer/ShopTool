@@ -42,10 +42,22 @@ public class ShopGenerator {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+    	//test parsing
+    	/*
         Shop shop = getShopFromFile(new File("ShopListExample2"));
         log(extract("NAME=Test SELL=5 PRICE=120", PRICE));
         log(extract("NAME=Test SELL=5 PRICE=120", NAME));
         log(extract("NAME=Test SELL=5 PRICE=120", "SELL"));
+        */
+    	
+    	//Test generation
+		LinkedList<Shop> shops = getShops(new File("./shops"));
+		String output = EventGenerator.generateShops(shops, false);
+		if (output != null)
+			System.out.println(output);
+		else
+			System.out.println("Something went wrong :'(");
+
     }
     
     public static LinkedList<Shop> getShops(File dir) {
@@ -56,7 +68,7 @@ public class ShopGenerator {
             public boolean accept(File file) {
                 return file.isFile() &&
                  file.getPath().substring(
-                        file.getPath().lastIndexOf('.')
+                        file.getPath().lastIndexOf('.') + 1
                  ).equals(extension);
             }
         });
