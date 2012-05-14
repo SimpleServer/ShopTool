@@ -10,7 +10,7 @@ package shoptool;
  *
  * @author Felix Wiemuth
  */
-public interface ShopTypeInterface {
+public interface ShopInterface {
     /**
      * Get the name of the shop type.
      * @return 
