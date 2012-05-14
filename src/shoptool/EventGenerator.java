@@ -68,7 +68,7 @@ public class EventGenerator {
 
 		// Load static NPC logic code for output
 		if (withstatic) {
-			InputStream input = ShopTool.class
+			InputStream input = ShopGenerator.class
 					.getResourceAsStream("static.xml");
 			BufferedReader in = new BufferedReader(new InputStreamReader(input));
 			String line = null;

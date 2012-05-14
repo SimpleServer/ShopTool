@@ -15,7 +15,7 @@ import java.util.logging.Logger;
  *
  * @author Felix Wiemuth
  */
-public class Generator {
+public class ShopGenerator {
     
     private final static String extension = "pricelist";
     private final static String ID = "ID";
@@ -92,7 +92,7 @@ public class Generator {
             //rest is the pricelist
             shop.setPricelist(getPriceListFromReader(reader));
         } catch (IOException ex) {
-            Logger.getLogger(Generator.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ShopGenerator.class.getName()).log(Level.SEVERE, null, ex);
         }
         shop.recalcPrices();
         return shop;
@@ -105,7 +105,7 @@ public class Generator {
             try {
                 line = reader.readLine();
             } catch (IOException ex) {
-                Logger.getLogger(Generator.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ShopGenerator.class.getName()).log(Level.SEVERE, null, ex);
             }
             if (line == null)
                 break;
@@ -178,7 +178,7 @@ public class Generator {
         try {
             input = new FileReader(file);
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(Generator.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ShopGenerator.class.getName()).log(Level.SEVERE, null, ex);
         }
         BufferedReader bufRead = new BufferedReader(input);
         return bufRead;
