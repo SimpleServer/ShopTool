@@ -46,7 +46,7 @@ public class Main {
         log(val);
 
         log("-----\nTest shops:");
-        LinkedList<ShopInterface> shops = (LinkedList<ShopInterface>) getShops(new File("."));
+        LinkedList<ShopInterface> shops = (LinkedList<ShopInterface>) getShops(new File("./testfiles/"));
         log("Amount of shops: " + shops.size());
 
         for (ShopInterface shop : shops) {
@@ -56,11 +56,14 @@ public class Main {
             log(shop.endCoord());
             log(shop.botCoord());
             log(shop.vendorName());
+            log("Pricelist:");
             //pricelist
             for (PriceListItemInterface item : shop.pricelist().items()) {
                 log("Item: " + item.id() + item.name() + " isBuy:" + item.isBuy() + " isSell:" + item.isSell());
             }
         }
+        
+        System.out.println(EventGenerator.generateShops(shops, false));
 
     }
 }

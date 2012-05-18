@@ -62,7 +62,7 @@ public class EventGenerator {
 
 	// Generation funcs
 
-	public static String generateShops(LinkedList<Shop> shops,
+	public static String generateShops(LinkedList<ShopInterface> shops,
 			boolean withstatic) {
 		String output = "";
 
@@ -101,16 +101,15 @@ public class EventGenerator {
 
 	// ----
 
-	private static String generateAreas(LinkedList<Shop> shops) {
+	private static String generateAreas(LinkedList<ShopInterface> shops) {
 		String open = "\n    <dimension name=\"Earth\">\n";
 		String close = "    </dimension>\n";
 
 		String content = "";
-		// TODO: use shop area coordinates
-		for (Shop s : shops) {
+		for (ShopInterface s : shops) {
 			String shopname = s.name();
-			String startcoord = "[0,0,0]";
-			String endcoord = "[0,0,0]";
+			String startcoord = s.startCoord();
+			String endcoord = s.endCoord();
 
 			content += "        <area name=\"" + shopname;
 			content += "\" start=\"" + startcoord + "\" end=\"" + endcoord
@@ -121,62 +120,61 @@ public class EventGenerator {
 		return open + content + close;
 	}
 
-	private static String generateAreaList(LinkedList<Shop> shops) {
+	private static String generateAreaList(LinkedList<ShopInterface> shops) {
 		final String ATTNAME = "store_areas";
 		String open = "    <event name=\"" + ATTNAME + "\" value=\"";
 		String close = "\" />\n";
 
 		ArrayList<String> arr = new ArrayList<String>();
-		for (Shop s : shops) {
+		for (ShopInterface s : shops) {
 			arr.add(s.name());
 		}
 
 		return open + fromArray(arr) + close;
 	}
 
-	private static String generateAreaBots(LinkedList<Shop> shops) {
+	private static String generateAreaBots(LinkedList<ShopInterface> shops) {
 		final String ATTNAME = "store_areaBots";
 		String open = "    <event name=\"" + ATTNAME + "\" value=\"";
 		String close = "\" />\n";
 
-		// TODO: use bot name instead of shop name
 		HashMap<String, String> hash = new HashMap<String, String>();
-		for (Shop s : shops) {
+		for (ShopInterface s : shops) {
 			String shopname = s.name();
-			String botname = s.name();
+			String botname = s.vendorName();
 			hash.put(shopname, botname);
 		}
 
 		return open + fromHash(hash) + close;
 	}
 
-	private static String generateBotCoords(LinkedList<Shop> shops) {
+	private static String generateBotCoords(LinkedList<ShopInterface> shops) {
 		final String ATTNAME = "store_botCoords";
 		String open = "    <event name=\"" + ATTNAME + "\" value=\"";
 		String close = "\" />\n";
 
-		// TODO: use bot name instead of shop name, use given coordinate
 		HashMap<String, String> hash = new HashMap<String, String>();
-		for (Shop s : shops) {
-			String botname = s.name();
-			String coordinate = "[0,0,0]";
+		for (ShopInterface s : shops) {
+			String botname = s.vendorName();
+			String coordinate = "["+s.botCoord()+"]";
 			hash.put(botname, coordinate);
 		}
 
 		return open + fromHash(hash) + close;
 	}
 
-	private static String generateListBuy(LinkedList<Shop> shops) {
+	private static String generateListBuy(LinkedList<ShopInterface> shops) {
 		final String ATTNAME = "store_listBuy";
 		String open = "    <event name=\"" + ATTNAME + "\" value=\"";
 		String close = "\" />\n";
 
 		HashMap<String, String> hash = new HashMap<String, String>();
-		for (Shop s : shops) {
+		for (ShopInterface s : shops) {
 			HashMap<String, String> entry = new HashMap<String, String>();
-			// TODO: skip items not to be bought
-			for (PriceListItem i : s.pricelist().items) {
-				entry.put(String.valueOf(i.id()), String.valueOf(i.priceBuy()));
+			for (PriceListItemInterface i : s.pricelist().items()) {
+				if (i.isBuy()) {
+					entry.put(String.valueOf(i.id()), String.valueOf(i.priceBuy()));
+				}
 			}
 			hash.put(s.name(), fromHash(entry));
 		}
@@ -184,17 +182,18 @@ public class EventGenerator {
 		return open + fromHash(hash) + close;
 	}
 
-	private static String generateListSell(LinkedList<Shop> shops) {
+	private static String generateListSell(LinkedList<ShopInterface> shops) {
 		final String ATTNAME = "store_listSell";
 		String open = "    <event name=\"" + ATTNAME + "\" value=\"";
 		String close = "\" />\n";
 
 		HashMap<String, String> hash = new HashMap<String, String>();
-		for (Shop s : shops) {
+		for (ShopInterface s : shops) {
 			HashMap<String, String> entry = new HashMap<String, String>();
-			// TODO: skip items not to be sold
-			for (PriceListItem i : s.pricelist().items) {
-				entry.put(String.valueOf(i.id()), String.valueOf(i.priceSell()));
+			for (PriceListItemInterface i : s.pricelist().items()) {
+				if (i.isSell()) {
+					entry.put(String.valueOf(i.id()), String.valueOf(i.priceSell()));
+				}
 			}
 			hash.put(s.name(), fromHash(entry));
 		}
@@ -202,17 +201,17 @@ public class EventGenerator {
 		return open + fromHash(hash) + close;
 	}
 
-	private static String generateListStock(LinkedList<Shop> shops) {
+	private static String generateListStock(LinkedList<ShopInterface> shops) {
 		final String ATTNAME = "store_listStock";
 		String open = "    <event name=\"" + ATTNAME + "\" value=\"";
 		String close = "\" />\n";
 
 		HashMap<String, String> hash = new HashMap<String, String>();
-		for (Shop s : shops) {
+		for (ShopInterface s : shops) {
 			HashMap<String, String> entry = new HashMap<String, String>();
-			for (PriceListItem i : s.pricelist().items) {
+			for (PriceListItemInterface i : s.pricelist().items()) {
 				entry.put(String.valueOf(i.id()),
-						String.valueOf(i.normalStock()));
+						  String.valueOf(i.normalStock()));
 			}
 			hash.put(s.name(), fromHash(entry));
 		}
@@ -220,15 +219,15 @@ public class EventGenerator {
 		return open + fromHash(hash) + close;
 	}
 
-	private static String generateStockConf(LinkedList<Shop> shops) {
+	private static String generateStockConf(LinkedList<ShopInterface> shops) {
 		final String ATTNAME = "store_stockConf";
 		String open = "    <event name=\"" + ATTNAME + "\" value=\"";
 		String close = "\" />\n";
 
 		HashMap<String, String> hash = new HashMap<String, String>();
-		for (Shop s : shops) {
+		for (ShopInterface s : shops) {
 			HashMap<String, String> entry = new HashMap<String, String>();
-			for (PriceListItem i : s.pricelist().items) {
+			for (PriceListItemInterface i : s.pricelist().items()) {
 				ArrayList<String> arr = new ArrayList<String>();
 				arr.add(String.valueOf(i.normalStock()));
 				arr.add(String.valueOf(i.maxStock()));
