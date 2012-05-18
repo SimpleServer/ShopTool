@@ -34,6 +34,8 @@ public class PriceList implements PriceListInterface {
     }
 
     public PriceList(File file) {
+        //DEBUG
+        //log("Checking: " + file.toString() + " #" + extension);
         if (!checkFile(file, extension)) {
             return;
         }

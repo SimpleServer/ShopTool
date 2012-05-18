@@ -51,7 +51,8 @@ public class Shop implements ShopInterface {
 
             //TODO handle exceptions...
             //log("Will load: " + extract(reader.readLine(), PRICELIST) + '.' + PriceList.extension());
-            setPricelist(new PriceList(new File(extract(reader.readLine(), PRICELIST) + '.' + PriceList.extension())));
+            File pricelistFile = new File(file.getParent(), extract(reader.readLine(), PRICELIST) + '.' + PriceList.extension());
+            setPricelist(new PriceList(pricelistFile));
         } catch (IOException ex) {
             Logger.getLogger(Util.class.getName()).log(Level.SEVERE, null, ex);
         }

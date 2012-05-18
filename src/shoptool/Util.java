@@ -22,6 +22,10 @@ public class Util {
     private final static String assign = "=";
 
     public static boolean checkFile(File file, String extension) {
+        //DEBUG
+//        log("[" + file.toString() + "]" + "isFile:" + file.isFile());
+//        log("extension:" + file.getPath().substring(
+//                file.getPath().lastIndexOf('.') + 1).equals(extension));
         return file.isFile()
                 && file.getPath().substring(
                 file.getPath().lastIndexOf('.') + 1).equals(extension);
