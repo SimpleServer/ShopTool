@@ -210,6 +210,9 @@ public class EventGenerator {
 		for (ShopInterface s : shops) {
 			HashMap<String, String> entry = new HashMap<String, String>();
 			for (PriceListItemInterface i : s.pricelist().items()) {
+				if (!(i.isBuy() || i.isSell())) {
+					continue;
+				}
 				entry.put(String.valueOf(i.id()),
 						  String.valueOf(i.normalStock()));
 			}
@@ -228,6 +231,9 @@ public class EventGenerator {
 		for (ShopInterface s : shops) {
 			HashMap<String, String> entry = new HashMap<String, String>();
 			for (PriceListItemInterface i : s.pricelist().items()) {
+				if (!(i.isBuy() || i.isSell())) {
+					continue;
+				}
 				ArrayList<String> arr = new ArrayList<String>();
 				arr.add(String.valueOf(i.normalStock()));
 				arr.add(String.valueOf(i.maxStock()));
