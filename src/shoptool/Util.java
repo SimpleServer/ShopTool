@@ -6,6 +6,7 @@
 package shoptool;
 
 import java.io.*;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,35 +27,35 @@ public class Util {
 //        log("[" + file.toString() + "]" + "isFile:" + file.isFile());
 //        log("extension:" + file.getPath().substring(
 //                file.getPath().lastIndexOf('.') + 1).equals(extension));
-        return file.isFile()
-                && file.getPath().substring(
-                file.getPath().lastIndexOf('.') + 1).equals(extension);
+        if (!file.isFile()) {
+            err("File '" + file.toString() + "' does not exist!");
+            return false;
+        }
+        if (!file.getPath().substring(file.getPath().lastIndexOf('.') + 1).equals(extension)) {
+            return false;
+        }
+        return true;
     }
 
     /**
      * Get all shops in directory 'dir'.
+     * The contained data, including those in the pricelists,
+     * is guaranteed to be in the correct format.
      * @param dir
      * @return 
      */
-    public static LinkedList<? extends ShopInterface> getShops(File dir) {
-        LinkedList<Shop> shops = new LinkedList<Shop>();
-
-        File[] files = dir.listFiles(new FileFilter() {
-
-            @Override
-            public boolean accept(File file) {
-                return checkFile(file, Shop.extension());
+    public static LinkedList<? extends ShopInterface> getShops(String dir) {
+        LinkedList<Shop> shops = Shop.getShops(new File(dir));
+        //revise the list / remove shops that cannot be corrected
+        Iterator<Shop> it = shops.iterator();
+        while (it.hasNext()) {
+            Shop s = it.next();
+            if (!s.revise()) {
+                err("Could not revise shop '" + s.name() + "' - removing shop!");
+                it.remove();
             }
-        });
 
-        for (File file : files) {
-            shops.add(new Shop(file));
-            if (shops.peekFirst() == null) //file was no correct shop file
-            {
-                shops.removeFirst();
-            }
         }
-
         return shops;
     }
 
@@ -74,12 +75,20 @@ public class Util {
             return null;
         }
         int i = line.indexOf(key + assign);
+        if (i == -1) //key not found
+        {
+            return null;
+        }
         int end = line.indexOf(seperator, i);
         if (end == -1) {
             end = line.length();
         }
         try {
-            return line.substring(line.indexOf(assign, i) + 1, end);
+            String ret = line.substring(line.indexOf(assign, i) + 1, end);
+            if (ret.length() == 0) {
+                return null;
+            }
+            return ret;
         } catch (IndexOutOfBoundsException e) {
             return null;
         }
@@ -92,6 +101,27 @@ public class Util {
         } catch (NumberFormatException e) {
             return -1;
         }
+    }
+
+    public static String extractCoord(String line, String key) {
+        String raw = extract(line, key);
+        int x, y, z;
+        int start, end;
+        try {
+            start = 0;
+            end = raw.indexOf(',', start);
+            x = Integer.parseInt(raw.substring(start, end));
+            start = end + 1;
+            end = raw.indexOf(',', start);
+            y = Integer.parseInt(raw.substring(start, end));
+            start = end + 1;
+            z = Integer.parseInt(raw.substring(start, raw.length()));
+        } catch (NumberFormatException e1) {
+            return null;
+        } catch (IndexOutOfBoundsException e2) {
+            return null;
+        }
+        return Integer.toString(x) + "," + y + "," + z;
     }
 
     //Extract a Double value - '-1' on failure
@@ -139,8 +169,20 @@ public class Util {
         }
     }
 
+    public static void revErr(String key) {
+        err(key + " not set - abort revision.");
+    }
+
+    public static void revWarn(String key, String object) {
+        warn(key + " not set in '" + object + "' - setting defaults.");
+    }
+
     public static void log(Object o) {
         System.out.println(o);
+    }
+
+    public static void info(Object o) {
+        log("[INFO] " + o);
     }
 
     public static void warn(Object o) {

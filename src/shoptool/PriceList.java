@@ -8,6 +8,7 @@ package shoptool;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -33,19 +34,18 @@ public class PriceList implements PriceListInterface {
         //TODO implement
     }
 
-    public PriceList(File file) {
-        //DEBUG
-        //log("Checking: " + file.toString() + " #" + extension);
+    public PriceList(File file) throws Exception {
         if (!checkFile(file, extension)) {
-            return;
+            throw new Exception();
         }
         BufferedReader reader = getReader(file);
-        String line = null;
+        String line;
         while (true) {
             try {
                 line = reader.readLine();
-            } catch (IOException ex) {
-                Logger.getLogger(Util.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException e) {
+                err("I/O error: " + e.getMessage());
+                break;
             }
             if (line == null) {
                 break;
@@ -69,6 +69,23 @@ public class PriceList implements PriceListInterface {
 
     private void addItem(PriceListItem item) {
         items.add(item);
+    }
+    
+    /**
+     * Call 'revise()' on all items in the pricelist and remove uncorrectables.
+     */
+    public void revise() {
+        info("Revising pricelist:");
+        Iterator<PriceListItem> it = items.iterator();
+        while(it.hasNext()) {
+            PriceListItem item = it.next();
+            if (!item.revise()) {
+                err("Could not revise item '" + item.toStr() + "' - removing from pricelist!");
+                it.remove();
+            }
+                
+        }
+        info("Finished revising pricelist.");
     }
 
     public static String extension() {

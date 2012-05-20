@@ -16,8 +16,6 @@ public class PriceListItem implements PriceListItemInterface {
     private final static char ID_SEPERATOR = ':';
     private final static String ID = "ID";
     private final static String NAME = "NAME";
-    private final static String INTEREST_BUY = "INTEREST_BUY";
-    private final static String INTEREST_SELL = "INTEREST_SELL";
     private final static String PRICE = "PRICE";
     private final static String PRICE_BUY = "PRICE_BUY";
     private final static String PRICE_SELL = "PRICE_SELL";
@@ -27,8 +25,6 @@ public class PriceListItem implements PriceListItemInterface {
     private final static String DEFAULT_NAME = "";
     private final static int DEFAULT_MAXSTOCK = 0;
     private final static int DEFAULT_NORMALSTOCK = 0;
-    private final static int DEFAULT_PRICE_BUY = 0;
-    private final static int DEFAULT_PRICE_SELL = 0;
     private final static int DEFAULT_STOCK_UPDATE_TIME = 0;
     private String id; //minecraft block id
     private String name; //minecraft block name
@@ -49,8 +45,9 @@ public class PriceListItem implements PriceListItemInterface {
         {
             throw new Exception();
         }
+        
         setName(extract(line, NAME));
-
+        
         int price = extractInt(line, PRICE);
         if (price == -1) {
             setPriceBuy(extractInt(line, PRICE_BUY));
@@ -68,22 +65,26 @@ public class PriceListItem implements PriceListItemInterface {
     /**
      * Check this item for correctness and set default values for
      * incorrect fields.
-     * Only if building a correct item failed, 'false' is returned
+     * Only if building a correct item failed, 'false' is returned.
      * @return 
      */
     public boolean revise() {
         //note: id must be correct already
         if (name == null) {
+            revWarn(NAME, toStr());
             setName(DEFAULT_NAME);
         }
         //leave priceBuy/priceSell: '-1' means not available
         if (normalStock == -1) {
+            revWarn(NORMAL_STOCK, toStr());
             setNormalStock(DEFAULT_NORMALSTOCK);
         }
         if (maxStock == -1) {
+            revWarn(MAX_STOCK, toStr());
             setMaxStock(DEFAULT_MAXSTOCK);
         }
         if (stockUpdateTime == -1) {
+            revWarn(STOCK_UPDATE_TIME, toStr());
             setStockUpdateTime(DEFAULT_STOCK_UPDATE_TIME);
         }
         return true;
@@ -98,7 +99,7 @@ public class PriceListItem implements PriceListItemInterface {
      * Otherwise 'false' is returned.
      * @return 
      */
-    private final boolean reviseID() {
+    private boolean reviseID() {
         if (id == null) {
             return false;
         }
