@@ -5,7 +5,6 @@
  ******************************************************/
 package shoptool;
 
-import java.io.File;
 import java.util.LinkedList;
 import static shoptool.Util.getShops;
 import static shoptool.Util.log;
@@ -46,11 +45,11 @@ public class Main {
         log(val);
 
         log("-----\nTest shops:");
-        LinkedList<ShopInterface> shops = (LinkedList<ShopInterface>) getShops(new File("./testfiles/"));
+        LinkedList<ShopInterface> shops = (LinkedList<ShopInterface>) getShops("./testfiles/");
         log("Amount of shops: " + shops.size());
 
         for (ShopInterface shop : shops) {
-            log("---> SHOP:");
+            log("\n---> SHOP:");
             log(shop.name());
             log(shop.startCoord());
             log(shop.endCoord());
