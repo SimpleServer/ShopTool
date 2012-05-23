@@ -115,7 +115,7 @@ public class Shop implements ShopInterface {
 
             @Override
             public boolean accept(File file) {
-                return checkFile(file, Shop.extension());
+                return checkFile(file, extension);
             }
         });
 

@@ -7,11 +7,11 @@ package shoptool;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import static shoptool.Util.*;
 
 /**
@@ -21,23 +21,37 @@ import static shoptool.Util.*;
 public class PriceList implements PriceListInterface {
 
     private final static String extension = "pricelist";
-    private LinkedList<PriceListItem> items = new LinkedList<PriceListItem>();
+    private LinkedList<PriceListItem> items;
 
     /**
-     * Create a new pricelist from existing pricelist
+     * Create a new pricelist from existing pricelists.
      * @param base
      * @param factor
      * @param interestBuy
      * @param interestSell 
      */
-    public PriceList(PriceList base, double factor, double interestBuy, double interestSell) {
-        //TODO implement
+    public PriceList(LinkedList<PriceList> base, double factor, double interestBuy, double interestSell) {
+        HashMap<String, PriceListItem> map = new HashMap<String, PriceListItem>();
+        //add all items from pricelists in 'base', if items occur more than once
+        //only take first one
+        for (PriceList p : base) {
+            for (PriceListItem i : p.items()) {
+                if (!map.containsKey(i.id())) {
+                    //copy item
+                    PriceListItem iNew = new PriceListItem(i);
+                    iNew.changePrices(factor * (1 + interestBuy), factor * (1 - interestSell));
+                    map.put(iNew.id(), iNew);
+                }
+            }
+        }
+        items = new LinkedList<PriceListItem>(map.values());
     }
 
     public PriceList(File file) throws Exception {
         if (!checkFile(file, extension)) {
             throw new Exception();
         }
+        items = new LinkedList<PriceListItem>();
         BufferedReader reader = getReader(file);
         String line;
         while (true) {
@@ -70,22 +84,47 @@ public class PriceList implements PriceListInterface {
     private void addItem(PriceListItem item) {
         items.add(item);
     }
-    
+
     /**
      * Call 'revise()' on all items in the pricelist and remove uncorrectables.
      */
     public void revise() {
         info("Revising pricelist:");
         Iterator<PriceListItem> it = items.iterator();
-        while(it.hasNext()) {
+        while (it.hasNext()) {
             PriceListItem item = it.next();
             if (!item.revise()) {
                 err("Could not revise item '" + item.toStr() + "' - removing from pricelist!");
                 it.remove();
             }
-                
+
         }
         info("Finished revising pricelist.");
+    }
+    
+    public static LinkedList<PriceList> getPriceLists(File dir) {
+        LinkedList<PriceList> lists = new LinkedList<PriceList>();
+
+        File[] files = dir.listFiles(new FileFilter() {
+
+            @Override
+            public boolean accept(File file) {
+                return checkFile(file, extension);
+            }
+        });
+
+        for (File file : files) {
+            try {
+                lists.add(new PriceList(file));
+                info("Loaded pricelist " + file.getName());
+            } catch (Exception e) {
+                err("Could not load pricelist " + file.getName() + "!");
+                //do not add pricelist - it cannot be loaded correctly from 'file'
+                err(e.getMessage());
+            }
+        }
+
+        return lists;
     }
 
     public static String extension() {

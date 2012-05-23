@@ -36,6 +36,20 @@ public class PriceListItem implements PriceListItemInterface {
     private int stockUpdateTime; //time in seconds the current stock is changed by one item towards 'normalStock'
 
     /**
+     * Copy constructor.
+     * @param src 
+     */
+    public PriceListItem(PriceListItem src) {
+        id = src.id;
+        name = src.name;
+        priceSell = src.priceSell;
+        priceBuy = src.priceBuy;
+        normalStock = src.normalStock;
+        maxStock = src.maxStock;
+        stockUpdateTime = src.stockUpdateTime;
+    }
+    
+    /**
      * Parse an 'PriceListItem' from a String (line of a pricelist)
      * @param line 
      */
@@ -121,6 +135,17 @@ public class PriceListItem implements PriceListItemInterface {
                 return false;
             }
         }
+    }
+    
+    /**
+     * Factor the prices.
+     * Buy is always ceiled, sell floored.
+     * @param factorBuy
+     * @param factorSell 
+     */
+    public void changePrices(double factorBuy, double factorSell) {
+        priceBuy = (int) Math.ceil(priceBuy * factorBuy);
+        priceSell = (int) Math.floor(priceSell * factorSell);
     }
 
     public String toStr() {
