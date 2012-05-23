@@ -1,5 +1,7 @@
 ShopTool
 ========
+Version 0.x.x Alpha
+
 Copyright (C) 2012 Felix Wiemuth, Anton Pirogov
 
 License
