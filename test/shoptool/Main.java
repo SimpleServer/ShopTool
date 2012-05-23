@@ -5,6 +5,7 @@
  ******************************************************/
 package shoptool;
 
+import java.io.File;
 import java.util.LinkedList;
 import static shoptool.Util.getShops;
 import static shoptool.Util.log;
@@ -62,7 +63,19 @@ public class Main {
             }
         }
         
-        System.out.println(EventGenerator.generateShops(shops, false));
+        log(EventGenerator.generateShops(shops, false));
+        
+        //Test loading pricelists
+        LinkedList<PriceList> pl = PriceList.getPriceLists(new File("./testfiles"));
+        for (PriceList p : pl) {
+            log("- List starting with item: " + p.items().getFirst().toStr());
+        }
+        //Test creating pricelist of existing ones
+        PriceList pNew = new PriceList(pl, 1.00, 0.05, 0.20);
+        log("New pricelist:");
+        for (PriceListItem item : pNew.items()) {
+            log(item.toStr());
+        }
 
     }
 }
