@@ -19,8 +19,12 @@ public class Util {
     //global control characters for all files
 
     private final static char COMMENT_BEGIN = '#';
-    private final static String seperator = " ";
+    private static String seperator = null; //must be set by callers of the static methods
     private final static String assign = "=";
+
+    public static void setSeperator(String s) {
+        seperator = s;
+    }
 
     public static boolean checkFile(File file, String extension) {
         //DEBUG
@@ -59,6 +63,7 @@ public class Util {
         return shops;
     }
 
+    //extract the import part of the line (without comment)
     public static String extractCode(String raw) {
         String line; //line without comment
         try {
@@ -74,17 +79,18 @@ public class Util {
         if (line == null) {
             return null;
         }
-        int i = line.indexOf(key + assign);
+        String code = extractCode(line);
+        int i = code.indexOf(key + assign);
         if (i == -1) //key not found
         {
             return null;
         }
-        int end = line.indexOf(seperator, i);
+        int end = code.indexOf(seperator, i);
         if (end == -1) {
-            end = line.length();
+            end = code.length();
         }
         try {
-            String ret = line.substring(line.indexOf(assign, i) + 1, end);
+            String ret = code.substring(code.indexOf(assign, i) + 1, end);
             if (ret.length() == 0) {
                 return null;
             }
