@@ -12,7 +12,7 @@ import static shoptool.Util.*;
  * @author Felix Wiemuth
  */
 public class PriceListItem implements PriceListItemInterface {
-
+    private final static String seperator = " ";
     private final static char ID_SEPERATOR = ':';
     private final static String ID = "ID";
     private final static String NAME = "NAME";
@@ -54,6 +54,7 @@ public class PriceListItem implements PriceListItemInterface {
      * @param line 
      */
     public PriceListItem(String line) throws Exception {
+        setSeperator(seperator);
         setId(extract(line, ID));
         if (!reviseID()) //fatal: no correct ID
         {
@@ -149,6 +150,7 @@ public class PriceListItem implements PriceListItemInterface {
     }
 
     public String toStr() {
+        setSeperator(seperator);
         StringBuilder sb = new StringBuilder();
         sb.append(svalToStr(ID, id));
         sb.append(svalToStr(NAME, name));
@@ -157,7 +159,7 @@ public class PriceListItem implements PriceListItemInterface {
         sb.append(ivalToStr(NORMAL_STOCK, normalStock));
         sb.append(ivalToStr(MAX_STOCK, maxStock));
         sb.append(ivalToStr(STOCK_UPDATE_TIME, stockUpdateTime));
-        sb.deleteCharAt(sb.length() - 1); //remove last seperator
+        sb.delete(sb.length() - seperator.length(), sb.length()); //remove last seperator
         return sb.toString();
     }
 

@@ -5,10 +5,7 @@
  ******************************************************/
 package shoptool;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileFilter;
-import java.io.IOException;
+import java.io.*;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -19,7 +16,6 @@ import static shoptool.Util.*;
  * @author Felix Wiemuth
  */
 public class PriceList implements PriceListInterface {
-
     private final static String extension = "pricelist";
     private LinkedList<PriceListItem> items;
 
@@ -69,6 +65,26 @@ public class PriceList implements PriceListInterface {
         closeReader(reader);
     }
 
+    //TODO align keys when saving!
+    public void save(String dir, String name) {
+        File file = new File(dir, name + '.' + extension);
+        if (file.isFile()) {
+            err("Cannot write pricelist: file \"" + file.toString() + "\" already exists!");
+            return;
+        }
+        FileWriter out;
+        try {
+            out = new FileWriter(file);
+            for (PriceListItem item : items) {
+                out.write(item.toStr() + '\n');
+            }
+            out.close();
+            info("Successfully created \"" + file.toString() + "\"!");
+        } catch (IOException e) {
+            err("I/O error: " + e.getMessage());
+        }
+    }
+
     private void addItem(String raw) {
         String line = extractCode(raw);
         if (line.equals("")) {
@@ -101,7 +117,7 @@ public class PriceList implements PriceListInterface {
         }
         info("Finished revising pricelist.");
     }
-    
+
     public static LinkedList<PriceList> getPriceLists(File dir) {
         LinkedList<PriceList> lists = new LinkedList<PriceList>();
 

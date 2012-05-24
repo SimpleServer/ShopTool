@@ -5,13 +5,8 @@
  ******************************************************/
 package shoptool;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileFilter;
-import java.io.IOException;
+import java.io.*;
 import java.util.LinkedList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import static shoptool.Util.*;
 
 /**
@@ -21,6 +16,7 @@ import static shoptool.Util.*;
 public class Shop implements ShopInterface {
 
     private final static String extension = "shop";
+    private final static String seperator = "\n";
     private final static String NAME = "NAME";
     private final static String STARTCOORD = "STARTCOORD";
     private final static String ENDCOORD = "ENDCOORD";
@@ -42,6 +38,7 @@ public class Shop implements ShopInterface {
         }
         BufferedReader reader = getReader(file);
         try {
+            setSeperator(seperator);
             //set properties line by line
             setName(extract(reader.readLine(), NAME));
             setStartCoord(extractCoord(reader.readLine(), STARTCOORD));
@@ -96,6 +93,23 @@ public class Shop implements ShopInterface {
         return true;
     }
 
+    public void save(String dir, String name) {
+        File file = new File(dir, name + '.' + extension);
+        if (file.isFile()) {
+            err("Cannot write shop: file \"" + file.toString() + "\" already exists!");
+            return;
+        }
+        FileWriter out;
+        try {
+            out = new FileWriter(file);
+            out.write(toStr());
+            out.close();
+            info("Successfully created \"" + file.toString() + "\"!");
+        } catch (IOException e) {
+            err("I/O error: " + e.getMessage());
+        }
+    }
+
 //TODO if botCoord not specified: put bot in middle of area
 //    private String areaMiddle(int x1, int y1, int z1, int x2, int y2, int z2) {        
 //        int x = (x1 + x2) / 2;
@@ -129,6 +143,19 @@ public class Shop implements ShopInterface {
         }
 
         return shops;
+    }
+
+    public String toStr() {
+        setSeperator(seperator);
+        StringBuilder sb = new StringBuilder();
+        sb.append(svalToStr(NAME, name));
+        sb.append(svalToStr(STARTCOORD, startCoord));
+        sb.append(svalToStr(ENDCOORD, endCoord));
+        sb.append(svalToStr(BOTCOORD, botCoord));
+        sb.append(svalToStr(VENDORNAME, vendorName));
+        sb.append(svalToStr(PRICELIST, "")); //TODO save file name?
+        sb.delete(sb.length() - seperator.length(), sb.length()); //remove last seperator
+        return sb.toString();
     }
 
     @Override
