@@ -41,41 +41,50 @@ public class Main {
 //        }
 //        log("-----------");
 
-        //test id with ":"
-        int val = Integer.parseInt("0045:03".substring("0045:03".indexOf(':') + 1, "0045:03".length()));
-        log(val);
+//        //test id with ":"
+//        int val = Integer.parseInt("0045:03".substring("0045:03".indexOf(':') + 1, "0045:03".length()));
+//        log(val);
 
         log("-----\nTest shops:");
         LinkedList<ShopInterface> shops = (LinkedList<ShopInterface>) getShops("./testfiles/");
-        log("Amount of shops: " + shops.size());
+        log("-----\nAmount of shops: " + shops.size());
 
-        for (ShopInterface shop : shops) {
-            log("\n---> SHOP:");
-            log(shop.name());
-            log(shop.startCoord());
-            log(shop.endCoord());
-            log(shop.botCoord());
-            log(shop.vendorName());
-            log("Pricelist:");
-            //pricelist
-            for (PriceListItemInterface item : shop.pricelist().items()) {
-                log("Item: " + item.id() + item.name() + " isBuy:" + item.isBuy() + " isSell:" + item.isSell());
-            }
-        }
+//        for (ShopInterface shop : shops) {
+//            log("\n---> SHOP:");
+//            log(shop.name());
+//            log(shop.startCoord());
+//            log(shop.endCoord());
+//            log(shop.botCoord());
+//            log(shop.vendorName());
+//            log("Pricelist:");
+//            //pricelist
+//            for (PriceListItemInterface item : shop.pricelist().items()) {
+//                log("Item: " + item.id() + item.name() + " isBuy:" + item.isBuy() + " isSell:" + item.isSell());
+//            }
+//        }
         
-        log(EventGenerator.generateShops(shops, false));
+        
+        //Test saving shop
+        Shop myShop = (Shop) shops.getFirst();
+        myShop.save("./testfiles", "ShopSaved");
+        
+//        log(EventGenerator.generateShops(shops, false));
         
         //Test loading pricelists
         LinkedList<PriceList> pl = PriceList.getPriceLists(new File("./testfiles"));
         for (PriceList p : pl) {
             log("- List starting with item: " + p.items().getFirst().toStr());
         }
+        
         //Test creating pricelist of existing ones
         PriceList pNew = new PriceList(pl, 1.00, 0.05, 0.20);
-        log("New pricelist:");
-        for (PriceListItem item : pNew.items()) {
-            log(item.toStr());
-        }
+//        log("New pricelist:");
+//        for (PriceListItem item : pNew.items()) {
+//            log(item.toStr());
+//        }
+        
+        //Test saving of new pricelist
+        pNew.save("./testfiles", "myNewPL");
 
     }
 }
