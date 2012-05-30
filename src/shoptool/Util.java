@@ -36,6 +36,7 @@ public class Util {
             return false;
         }
         if (!file.getPath().substring(file.getPath().lastIndexOf('.') + 1).equals(extension)) {
+            err("File '" + file.toString() + "' has not the required extension \"" + extension + "\"!");
             return false;
         }
         return true;

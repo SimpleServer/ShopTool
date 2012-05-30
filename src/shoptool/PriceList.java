@@ -16,9 +16,11 @@ import static shoptool.Util.*;
  * @author Felix Wiemuth
  */
 public class PriceList implements PriceListInterface {
+
     private final static String extension = "pricelist";
     private LinkedList<PriceListItem> items;
 
+    //TODO preserve order!
     /**
      * Create a new pricelist from existing pricelists.
      * @param base
@@ -63,11 +65,12 @@ public class PriceList implements PriceListInterface {
             addItem(line);
         }
         closeReader(reader);
+        info("Loaded pricelist " + file.getName());
     }
 
     //TODO align keys when saving!
-    public void save(String dir, String name) {
-        File file = new File(dir, name + '.' + extension);
+    public void save(String path) {
+        File file = new File(path);
         if (file.isFile()) {
             err("Cannot write pricelist: file \"" + file.toString() + "\" already exists!");
             return;
@@ -132,11 +135,8 @@ public class PriceList implements PriceListInterface {
         for (File file : files) {
             try {
                 lists.add(new PriceList(file));
-                info("Loaded pricelist " + file.getName());
             } catch (Exception e) {
-                err("Could not load pricelist " + file.getName() + "!");
                 //do not add pricelist - it cannot be loaded correctly from 'file'
-                err(e.getMessage());
             }
         }
 
