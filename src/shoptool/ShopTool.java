@@ -10,8 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.LinkedList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 import static shoptool.Util.err;
 import static shoptool.Util.log;
 
@@ -22,9 +21,10 @@ import static shoptool.Util.log;
 public class ShopTool {
 
     public static void main(String[] args) {
-        run(); //DEBUG
+        run();
     }
     public static final String CMD_HELP = "help";
+    public static final String CMD_EXIT = "exit";
     public static final String CMD_PRICELIST = "pl";
     public static final String CMD_PRICELIST_SYNTAX = "pl [factor] [interest buy] [interest sell] [dest] [file 1] [file 2] ...";
     public static final String CMD_PRICELIST_HELP = "Usage: ";
@@ -35,14 +35,18 @@ public class ShopTool {
     public static final String CMD_EVENT_SYNTAX = "";
     public static final String CMD_EVENT_HELP = "Usage: ";
 
-    //DEBUG
     public static void run() {
+        log("Welcome to ShopTool for Minecraft/SimpleServer!\n"
+                + "Use \"help\" for help.");
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
         String line;
         while (true) {
+            System.out.print("> ");
             try {
                 line = in.readLine();
-                execute(line.split(" "));
+                if (!execute(line.split(" "))) {
+                    return;
+                }
             } catch (IOException e) {
                 err("I/O error: " + e.getMessage());
             }
@@ -50,9 +54,9 @@ public class ShopTool {
 
     }
 
-    private static void execute(String[] args) {
+    private static boolean execute(String[] args) {
         if (args.length == 0) {
-            return;
+            return true;
         }
         if (args[0].equals(CMD_PRICELIST)) {
             if (args.length < 4) {
@@ -67,10 +71,12 @@ public class ShopTool {
         } else if (args[0].equals(CMD_EVENT)) {
         } else if (args[0].equals(CMD_HELP)) {
             logCommands();
+        } else if (args[0].equals(CMD_EXIT)) {
+            return false;
         } else {
             log("The command '" + args[0] + "' does not exist!");
         }
-
+        return true;
     }
 
     private static void logCommands() {
@@ -80,7 +86,7 @@ public class ShopTool {
         log(CMD_EVENT_SYNTAX);
 
     }
-    
+
     private static void cmdPricelist(double factor, double interestBuy, double interestSell, String dest, String[] files) {
         LinkedList<PriceList> pricelists = new LinkedList<PriceList>();
         for (int i = 5; i < files.length; i++) {
@@ -93,7 +99,7 @@ public class ShopTool {
         PriceList p = new PriceList(pricelists, factor, interestBuy, interestSell);
         p.save(dest);
     }
-    
+
     private static double parseDouble(String in) throws Exception {
         try {
             return Double.parseDouble(in);
