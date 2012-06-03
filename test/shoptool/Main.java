@@ -77,14 +77,14 @@ public class Main {
         }
         
         //Test creating pricelist of existing ones
-        PriceList pNew = new PriceList(pl, 1.00, 0.05, 0.20);
+        PriceList pNew = new PriceList(pl, 1.00, 0.05, 0.20, -1, false, -1, false, -1, false);
 //        log("New pricelist:");
 //        for (PriceListItem item : pNew.items()) {
 //            log(item.toStr());
 //        }
         
         //Test saving of new pricelist
-        pNew.save("./testfiles", "myNewPL");
+        pNew.save("./testfiles/myNewPL");
 
     }
 }
