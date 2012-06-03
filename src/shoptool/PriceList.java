@@ -28,7 +28,8 @@ public class PriceList implements PriceListInterface {
      * @param interestBuy
      * @param interestSell 
      */
-    public PriceList(LinkedList<PriceList> base, double factor, double interestBuy, double interestSell) {
+    public PriceList(LinkedList<PriceList> base, double factor, double interestBuy, double interestSell,
+            int normal, boolean forceNormal, int max, boolean forceMax, int time, boolean forceTime) {
         HashMap<String, PriceListItem> map = new HashMap<String, PriceListItem>();
         //add all items from pricelists in 'base', if items occur more than once
         //only take first one
@@ -38,6 +39,15 @@ public class PriceList implements PriceListInterface {
                     //copy item
                     PriceListItem iNew = new PriceListItem(i);
                     iNew.changePrices(factor * (1 + interestBuy), factor * (1 - interestSell));
+                    if (iNew.normalStock() == -1 || forceNormal) {
+                        iNew.setNormalStock(normal);
+                    }
+                    if (iNew.maxStock() == -1 || forceMax) {
+                        iNew.setMaxStock(max);
+                    }
+                    if (iNew.stockUpdateTime() == -1 || forceTime) {
+                        iNew.setStockUpdateTime(time);
+                    }
                     map.put(iNew.id(), iNew);
                 }
             }

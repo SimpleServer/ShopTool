@@ -23,13 +23,18 @@ public class ShopTool {
     //private static final String CMD_EXIT = "exit";
     private static final String CMD_PRICELIST = "pl";
     private static final String CMD_PRICELIST_SYNTAX = CMD_PRICELIST
-            + " [factor] [interest buy] [interest sell] [dest] [file 1] [file 2] ...";
+            + " [factor] [interest buy] [interest sell]"
+            + " [[-n][-N]] normalStock"
+            + " [[-max][-MAX]] maxStock"
+            + " [[-t][-T]] stockUpdateTime"
+            + " [dest] [file 1] [file 2] ...";
     private static final String CMD_PRICELIST_HELP = "Command '" + CMD_PRICELIST_SYNTAX + "':\n"
             + "Generate a new pricelist based on the pricelists given in file1, file 2, ... .\n"
             + "Pricelists are revised before being processed.\n"
             + "factor: factor all prices with this constant\n"
             + "interest buy: add an interest to all buy prices\n"
             + "interest sell: subtract an interest from all sell prices\n"
+            + "- switches: -x set value if not set, -X force value\n"
             + "dest: path to the file the new pricelist should be saved to\n"
             + "file n: a correct pricelist file";
     private static final String CMD_SHOP = "shp";
@@ -75,8 +80,50 @@ public class ShopTool {
             if (args.length < 5) {
                 argErr(5);
             }
+            int normal = -1;
+            boolean fNormal = false;
+            int max = -1;
+            boolean fMax = false;
+            int time = -1;
+            boolean fTime = false;
+            int i = 4; //position of first optional parameter
+            if (args[i].equals("-n")) {
+                try {normal = parseNat(args[i + 1]);}
+                catch (Exception e) {return false;}
+                i+=2;
+            }
+            else if (args[i].equals("-N")) {
+                try {normal = parseNat(args[i + 1]);}
+                catch (Exception e) {return false;}
+                fNormal = true;
+                i+=2;
+            }
+            if (args[i].equals("-max")) {
+                try {max = parseNat(args[i + 1]);}
+                catch (Exception e) {return false;}
+                i+=2;
+            }
+            else if (args[i].equals("-MAX")) {
+                try {max = parseNat(args[i + 1]);}
+                catch (Exception e) {return false;}
+                fMax = true;
+                i+=2;
+            }
+            if (args[i].equals("-t")) {
+                try {time = parseNat(args[i + 1]);}
+                catch (Exception e) {return false;}
+                i+=2;
+            }
+            else if (args[i].equals("-T")) {
+                try {time = parseNat(args[i + 1]);}
+                catch (Exception e) {return false;}
+                fTime = true;
+                i+=2;
+            }
             try {
-                cmdPricelist(parseDouble(args[1]), parseDouble(args[2]), parseDouble(args[3]), args[4], args);
+                cmdPricelist(parseDouble(args[1]), parseDouble(args[2]), parseDouble(args[3]),
+                        normal, fNormal, max, fMax, time, fTime,
+                        args[i], i+1, args);
             } catch (Exception e) {
             }
         } else if (args[0].equals(CMD_SHOP)) {
@@ -128,16 +175,19 @@ public class ShopTool {
 
     }
 
-    private static void cmdPricelist(double factor, double interestBuy, double interestSell, String dest, String[] files) {
+    private static void cmdPricelist(double factor, double interestBuy, double interestSell,
+            int normal, boolean forceNormal, int max, boolean forceMax, int time, boolean forceTime,
+            String dest, int i, String[] files) {
         LinkedList<PriceList> pricelists = new LinkedList<PriceList>();
-        for (int i = 5; i < files.length; i++) {
+        for (; i < files.length; i++) {
             try {
                 pricelists.add(new PriceList(new File(files[i])));
             } catch (Exception e) {
                 //do not add pricelist - it cannot be loaded correctly from args[i]
             }
         }
-        PriceList p = new PriceList(pricelists, factor, interestBuy, interestSell);
+        PriceList p = new PriceList(pricelists, factor, interestBuy, interestSell,
+                normal, forceNormal, max, forceMax, time, forceTime);
         p.save(dest);
     }
 
@@ -171,6 +221,19 @@ public class ShopTool {
             return Double.parseDouble(in);
         } catch (NumberFormatException e) {
             err("Value '" + in + "' should be a floating-point number!");
+            throw new Exception();
+        }
+    }
+
+    private static int parseNat(String in) throws Exception {
+        try {
+            int i = Integer.parseInt(in);
+            if (i < 0) {
+                throw new Exception();
+            }
+            return i;
+        } catch (NumberFormatException e) {
+            err("Value '" + in + "' should be a natural number!");
             throw new Exception();
         }
     }

@@ -212,7 +212,7 @@ public class PriceListItem implements PriceListItemInterface {
         this.id = id;
     }
 
-    private void setMaxStock(int maxStock) {
+    public final void setMaxStock(int maxStock) {
         this.maxStock = maxStock;
     }
 
@@ -220,7 +220,7 @@ public class PriceListItem implements PriceListItemInterface {
         this.name = name;
     }
 
-    private void setNormalStock(int normalStock) {
+    public final void setNormalStock(int normalStock) {
         this.normalStock = normalStock;
     }
 
@@ -232,7 +232,7 @@ public class PriceListItem implements PriceListItemInterface {
         this.priceSell = priceSell;
     }
 
-    private void setStockUpdateTime(int stockUpdateTime) {
+    public final void setStockUpdateTime(int stockUpdateTime) {
         this.stockUpdateTime = stockUpdateTime;
     }
 }
