@@ -111,7 +111,7 @@ You don´t actually define shops with ShopTool. Shops are simply built by a file
 *Note:* The keys (words in capital letters until the equal sign) must occur exactly in the shown order and one key per line.
 
 ###Shop events
-For using a shop with SimpleServer the script code for *SimpleServer events* must be generated.
+To use a shop with SimpleServer the script code for *SimpleServer events* must be generated.
 This is simply done with the event command.
 
 **Syntax of the event command:**
@@ -121,10 +121,11 @@ This is simply done with the event command.
 * `dest` path to the file the generated code should be saved to
 * `file n` a correct shop file
 
-<!--- TODO
-The switch `-s` is optional. If given... .
--->
+The switch `-s` is optional. If given, ShopTool will output the static code which is shared by all shops and does not need to change when you generate subsequent shops. You will need use that flag just the first time you use ShopTool to get that static event code. It contains all the generic shop logic and two new player commands - ``/balance`` and ``/buy``.
 
-<!--- TODO
 ###Use generated event code with SimpleServer
--->
+The generated code must be copied into your SimpleServer config.xml. Note that the generated areas have to be manually merged with your own areas from the config.xml and if you have your own ``onServerStart``, just add the line from the generated ``onServerStart`` event, to initialize the shops.
+
+Of course, for the shops to work, you have to set the ``enableEvents`` flag in ``simpleserver.properties`` to ``true``.
+
+If everything has been set up correctly, you will see the NPCs spawning at the specified locations after starting the server and you can test your shops (just follow the in-game instructions).
