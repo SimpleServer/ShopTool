@@ -125,7 +125,7 @@
         set '$store_playerBalances $store_playerBalances #PLAYER #playerbalance Hput
         set '$store_listStock $store_listStock #area #stocklist Hput
 
-        execcmd credits
+        execcmd balance
         return
       endif
     </event>
@@ -184,7 +184,7 @@
 
             inc '#i
           endwhile
-          execcmd credits
+          execcmd balance
           return
         endif
 
@@ -221,7 +221,7 @@
         set '$store_listStock $store_listStock #area #stocklist Hput
 
         execcmd give #item #count
-        execcmd credits
+        execcmd balance
     </event>
     <event name="storeCreditsCmd">
         set '#arg '#dest '#val '#rest to #POP Aexplode
@@ -237,8 +237,8 @@
 
         if #arg "transfer" eq not
           say #PLAYER #GRAY "Usage:" .
-          say #PLAYER #GRAY "/credits" .
-          say #PLAYER #GRAY "/credits transfer PLAYER VALUE" .
+          say #PLAYER #GRAY "/balance" .
+          say #PLAYER #GRAY "/balance transfer PLAYER VALUE" .
           return
         endif
 
