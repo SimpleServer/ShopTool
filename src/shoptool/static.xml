@@ -103,7 +103,7 @@
         if #keys #id Acontains not
           say #PLAYER #RED "This shop does not buy this item!" .
           push #id ":" . #dat .
-          execcmd give #POP #cnt
+          execcmd #PLAYER give #POP #cnt
           return
         endif
 
@@ -112,7 +112,7 @@
         if #hypo #max gt
           say #PLAYER #RED "This shop can not buy so much now! Come back later!" .
           push #id ":" . #dat .
-          execcmd give #POP #cnt
+          execcmd #PLAYER give #POP #cnt
           return
         endif
 
@@ -125,7 +125,7 @@
         set '$store_playerBalances $store_playerBalances #PLAYER #playerbalance Hput
         set '$store_listStock $store_listStock #area #stocklist Hput
 
-        execcmd balance
+        execcmd #PLAYER balance
         return
       endif
     </event>
@@ -184,7 +184,7 @@
 
             inc '#i
           endwhile
-          execcmd balance
+          execcmd #PLAYER balance
           return
         endif
 
@@ -220,8 +220,8 @@
         set '$store_playerBalances $store_playerBalances #PLAYER #playerbalance Hput
         set '$store_listStock $store_listStock #area #stocklist Hput
 
-        execcmd give #item #count
-        execcmd balance
+        execcmd #PLAYER give #item #count
+        execcmd #PLAYER balance
     </event>
     <event name="storeCreditsCmd">
         set '#arg '#dest '#val '#rest to #POP Aexplode
@@ -313,6 +313,6 @@
     </event>
 
 
-    <event name="store_lastVisit" />
-    <event name="store_playerBalances" />
+    <event name="store_lastVisit" value="{}" />
+    <event name="store_playerBalances" value="{}" />
 
