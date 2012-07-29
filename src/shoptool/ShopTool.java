@@ -200,6 +200,7 @@ public class ShopTool {
                 shops.add(new Shop(new File(args[pos])));
             } catch (Exception e) {
                 //do not add shop - it cannot be loaded correctly from files[i]
+                err(e.getMessage());
             }
         }
         
