@@ -1,4 +1,4 @@
-    <!-- Required static additions -->
+<!-- Required static additions: put in your <config> in the SimpleServer config.xml -->
     <command name="balance" allow="1+" event="storeCreditsCmd"/>
     <command name="buy" allow="1+" event="storeBuy"/>
 
@@ -103,7 +103,7 @@
         if #keys #id Acontains not
           say #PLAYER #RED "This shop does not buy this item!" .
           push #id ":" . #dat .
-          execcmd give #POP #cnt
+          execcmd #PLAYER give #POP #cnt
           return
         endif
 
@@ -112,7 +112,7 @@
         if #hypo #max gt
           say #PLAYER #RED "This shop can not buy so much now! Come back later!" .
           push #id ":" . #dat .
-          execcmd give #POP #cnt
+          execcmd #PLAYER give #POP #cnt
           return
         endif
 
@@ -125,7 +125,7 @@
         set '$store_playerBalances $store_playerBalances #PLAYER #playerbalance Hput
         set '$store_listStock $store_listStock #area #stocklist Hput
 
-        execcmd credits
+        execcmd #PLAYER balance
         return
       endif
     </event>
@@ -184,7 +184,7 @@
 
             inc '#i
           endwhile
-          execcmd credits
+          execcmd #PLAYER balance
           return
         endif
 
@@ -220,8 +220,8 @@
         set '$store_playerBalances $store_playerBalances #PLAYER #playerbalance Hput
         set '$store_listStock $store_listStock #area #stocklist Hput
 
-        execcmd give #item #count
-        execcmd credits
+        execcmd #PLAYER give #item #count
+        execcmd #PLAYER balance
     </event>
     <event name="storeCreditsCmd">
         set '#arg '#dest '#val '#rest to #POP Aexplode
@@ -237,8 +237,8 @@
 
         if #arg "transfer" eq not
           say #PLAYER #GRAY "Usage:" .
-          say #PLAYER #GRAY "/credits" .
-          say #PLAYER #GRAY "/credits transfer PLAYER VALUE" .
+          say #PLAYER #GRAY "/balance" .
+          say #PLAYER #GRAY "/balance transfer PLAYER VALUE" .
           return
         endif
 
@@ -313,6 +313,6 @@
     </event>
 
 
-    <event name="store_lastVisit" />
-    <event name="store_playerBalances" />
+    <event name="store_lastVisit" value="{}" />
+    <event name="store_playerBalances" value="{}" />
 

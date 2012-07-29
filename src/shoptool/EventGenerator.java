@@ -82,8 +82,9 @@ public class EventGenerator {
 		}
 
 		// Now generate
-		output += "<!-- Dynamic generated logic -->\n";
+		output += "<!-- Generated logic: put into your <config> section too -->\n";
 
+    output += "<!-- The shop areas: put into your <dimesion> section -->\n"
 		output += generateAreas(shops);
 		output += "\n";
 		output += generateAreaList(shops);
