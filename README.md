@@ -25,6 +25,15 @@ The result is a vendor bot showing up in the world with whom can be interacted.
 In fact the user in a first step creates *pricelists* to be able to create shops from these
 lists in a second step. To get started you can refer to the *Quickstart guide* below.
 
+##Setup: Preperations to use the shop system with SimpleServer
+Since the shop system is implemented via events,
+first make sure that the `enableEvents` flag in `simpleserver.properties` is set to `true`.
+Now the server needs additional code which is located in the `static.xml` file that comes with ShopTool.
+In general, the content can simply by copied into the `<config>` section
+of SimpleServers `config.xml`.
+If you already have a `onServerStart` event, just add the line `launch storeBotsRestartService`
+to initialize the shops and delete the copied `onServerStart` event.
+
 ##Usage
 <!--- TODO
 *If you are a (Windows) user who doesn´t know how to deal with the
@@ -212,16 +221,29 @@ This is simply done with the event command.
 * `dest` path to the file the generated code should be saved to
 * `file n` a correct shop file
 
-The switch `-s` is optional. If given, ShopTool will output the static code which is shared by all shops and does not need to change when you generate subsequent shops. You will need use that flag just the first time you use ShopTool to get that static event code. It contains all the generic shop logic and two new player commands - ``/balance`` and ``/buy``.
+The switch `-s` is optional. If given, ShopTool will output the static code which is shared
+by all shops and does not need to change when you generate subsequent shops.
+You will need use that flag just the first time you use ShopTool to get that static event code.
+It contains all the generic shop logic and two new player commands - ``/balance`` and ``/buy``.
 
 ###Use generated event code with SimpleServer
-The generated code must be copied into your SimpleServer config.xml. Note that the generated areas have to be manually merged with your own areas from the config.xml and if you have your own ``onServerStart``, just add the line from the generated ``onServerStart`` event, to initialize the shops.
+The generated code must be copied into the `<config>` section of your SimpleServer `config.xml`.
+The generated areas have to be manually merged with your own areas.
+To do so, move the content of the generated `<dimension>` section into your own.
 
-Of course, for the shops to work, you have to set the ``enableEvents`` flag in ``simpleserver.properties`` to ``true``.
-
-If everything has been set up correctly, you will see the NPCs spawning at the specified locations after starting the server and you can test your shops (just follow the in-game instructions).
+If everything has been set up correctly, you will see the NPCs spawning at the specified locations
+after starting the server and you can test your shops.
+Just follow the in-game instructions when entering a shop area
+or see the [SimpleServer wiki](https://github.com/SimpleServer/SimpleServer/wiki/Npcshops).
 
 ##Quickstart guide
+This will give a quick overview of how creating shops works.
+We won´t cover the useful `pricelist` command here, see above for that!
+
+***First read the "Setup" and "Usage" sections at the beginning of this file,
+it is necessary that you did the setup and know how to use the ShopTool program
+for this tutorial!***
+
 Let´s create a shop! We start by searching or building a good place in our Minecraft world (in-game). Then we write down the following coordinates:
 * *start* and *end* coordinates of a new 3D area that will be created for the shop like with the SimpleServer `myarea` command (imagine the two coords spanning a box)
 * the coordinates where the vendor bot should be placed
@@ -259,12 +281,14 @@ We replace the coordinates with the ones we wrote down before.
 ###Final steps
 Now lets create the code for our shop by executing
 
-    ev -s code.xml myshop.shop
-
-Note that the `static.xml` file must be present in the current directory.
+    ev code.xml myshop.shop
 
 Finally, we open the `code.xml` file that was created by ShopTool and copy its content.
 Then we open the `config.xml` file of our SimpleServer server and paste the code inside the `<config>` section.
+If you were already using areas you will have to merge them (see above for help).
+
+Now the shop can be tested by starting the server and entering the shop area.
+Just follow the in-game instructions!
 
 If you have any problems you could read the more detailed descriptions above and refer to the *troubleshooting* section below.
 
