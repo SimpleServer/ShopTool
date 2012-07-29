@@ -1,4 +1,4 @@
-    <!-- Required static additions -->
+<!-- Required static additions: put in your <config> in the SimpleServer config.xml -->
     <command name="balance" allow="1+" event="storeCreditsCmd"/>
     <command name="buy" allow="1+" event="storeBuy"/>
 
