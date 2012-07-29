@@ -244,9 +244,10 @@ If the shop should sell iron ingots for 500, buy them for 400 and buy birch wood
 We also stated that the shop should normally have 12 iron ingots available, can store a maximum of 20 and updates its stock towards 12 every 400 seconds. The same applies for the second entry respectively.
 
 ###The shop file
-It´s time to create our shop file which contains the general information about our shop:
+It´s time to create our shop file which contains the general information about our shop by
+writing the following lines into a new file `myshop.shop`.
 
-    NAME=StarShop
+    NAME=MyShop
     STARTCOORD=-30,70,20
     ENDCOORD=-20,70,25
     BOTCOORD=-25,70,24
@@ -258,7 +259,7 @@ We replace the coordinates with the ones we wrote down before.
 ###Final steps
 Now lets create the code for our shop by executing
 
-    ev -s code.xml star.shop
+    ev -s code.xml myshop.shop
 
 Note that the `static.xml` file must be present in the current directory.
 
