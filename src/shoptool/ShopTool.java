@@ -200,8 +200,15 @@ public class ShopTool {
                 shops.add(new Shop(new File(args[pos])));
             } catch (Exception e) {
                 //do not add shop - it cannot be loaded correctly from files[i]
+                err(e.getMessage());
             }
         }
+        
+        if (shops.isEmpty()) {
+            warn("None of the specified shops could be created - nothing to do!");
+            return;
+        }
+        
         String events = EventGenerator.generateShops(shops, withstatic);
         info("Successfully generated events!");
         //save events to file
