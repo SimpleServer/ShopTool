@@ -92,11 +92,11 @@ Copy a pricelist, delete item lines you don´t want to use and add lines that ar
 
 
 You can generate a new pricelist based on existing pricelists.
-In this process, all items given in the different lists are thrown together to build the new list.
-If items occur twice, only the first one ist taken.
+In this process, all items given in the different lists are thrown together to build the new list
+(if items occur twice, only the first one ist taken).
 This is especially useful if you want to apply some values to all items of a pricelist, e.g. interests or default stock or refill time values.
 It is also useful to create a raw assortment of a new shop - for this purpose there are basic pricelists that contain only items of a special group,
-e.g. ore or tools. After creating a pricelist like this you can go into the file an manually adapt some items.
+e.g. ore or wool. After creating a pricelist like this you can go into the file an manually adapt some items.
 
 Note that pricelists are revised before being processed: If an item line is incorrect ShopTool tries to make it valid but if that fails, the item is discarded.
 
@@ -298,5 +298,16 @@ If you have any problems you could read the more detailed descriptions above and
 * Did you try to read the output of ShopTool to get information about what´s wrong?
 * Did you merge the generated code correctly into `config.xml`? Check the SimpleServer console for errors!
 
+If you still have problems, you can consult the ShopTool forum page (see "Qustions and comments")
+to look for solutions or ask questions!
+
+##Feedback
+We´d like to know how you like ShopTool and if you have any suggestions to improve it.
+
 ###Bugs
 If you find any bugs in ShopTool, please report them using the Github issue system.
+
+###Questions and comments
+Visit the [ShopTool forum page](http://www.minecraftforum.net/topic/1380109-simpleserver-shoptool/) at the *Minecraft forums*
+to ask questions, discuss features or leave comments!
+
