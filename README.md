@@ -221,10 +221,9 @@ This is simply done with the event command.
 * `dest` path to the file the generated code should be saved to
 * `file n` a correct shop file
 
-The switch `-s` is optional. If given, ShopTool will output the static code which is shared
-by all shops and does not need to change when you generate subsequent shops.
-You will need use that flag just the first time you use ShopTool to get that static event code.
-It contains all the generic shop logic and two new player commands - ``/balance`` and ``/buy``.
+The switch `-s` is optional, it adds the code of `static.xml` to the output.
+If the setup is already done it shouldn´t be used.
+It can be used when generating shops for the first time to do setup and shops in one step.
 
 ###Use generated event code with SimpleServer
 The generated code must be copied into the `<config>` section of your SimpleServer `config.xml`.
@@ -240,7 +239,7 @@ or see the [SimpleServer wiki](https://github.com/SimpleServer/SimpleServer/wiki
 This will give a quick overview of how creating shops works.
 We won´t cover the useful `pricelist` command here, see above for that!
 
-***First read the "Setup" and "Usage" sections at the beginning of this file,
+***First read the "Setup" and "Usage" (general) sections at the beginning of this file,
 it is necessary that you did the setup and know how to use the ShopTool program
 for this tutorial!***
 
@@ -270,9 +269,9 @@ It´s time to create our shop file which contains the general information about 
 writing the following lines into a new file `myshop.shop`.
 
     NAME=MyShop
-    STARTCOORD=-30,70,20
+    STARTCOORD=-30,60,20
     ENDCOORD=-20,70,25
-    BOTCOORD=-25,70,24
+    BOTCOORD=-25,65,23
     VENDORNAME=Harry
     PRICELIST=list1
 
@@ -297,6 +296,7 @@ If you have any problems you could read the more detailed descriptions above and
 ###Checklist
 * Is `enableEvents=true` in `simpleserver.properties`?
 * Did you try to read the output of ShopTool to get information about what´s wrong?
+* Did you merge the generated code correctly into `config.xml`? Check the SimpleServer console for errors!
 
 ###Bugs
 If you find any bugs in ShopTool, please report them using the Github issue system.
