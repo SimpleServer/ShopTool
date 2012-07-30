@@ -240,7 +240,7 @@ or see the [SimpleServer wiki](https://github.com/SimpleServer/SimpleServer/wiki
 This will give a quick overview of how creating shops works.
 We won´t cover the useful `pricelist` command here, see above for that!
 
-***First read the "Setup" and "Usage" sections at the beginning of this file,
+***First read the "Setup" and "Usage" (general) sections at the beginning of this file,
 it is necessary that you did the setup and know how to use the ShopTool program
 for this tutorial!***
 
@@ -270,9 +270,9 @@ It´s time to create our shop file which contains the general information about 
 writing the following lines into a new file `myshop.shop`.
 
     NAME=MyShop
-    STARTCOORD=-30,70,20
+    STARTCOORD=-30,60,20
     ENDCOORD=-20,70,25
-    BOTCOORD=-25,70,24
+    BOTCOORD=-25,65,23
     VENDORNAME=Harry
     PRICELIST=list1
 
