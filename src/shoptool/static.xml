@@ -175,8 +175,16 @@
             set '#price #buylist #key Hget
             set '#onstock #stocklist #key Hget
             set '#refill '#max '#interval to #stockconf #key Hget Aexplode
+            
+            set '#CLR #YELLOW
+            if #onstock #max eq
+              set '#CLR #GREEN
+            endif
+            if #onstock 0 eq
+              set '#CLR #RED
+            endif
 
-            say #PLAYER #YELLOW #key getitemalias . #GRAY . "(" .. #onstock . '/ . #max . ")" . " : " . #WHITE . #price . "Credits" ..
+            say #PLAYER #CLR #key getitemalias . #GRAY . "(" .. #WHITE . #onstock . #GRAY . '/ . #max . ")" . " : " . #WHITE . #price . "Credits" ..
 
             inc '#i
           endwhile
