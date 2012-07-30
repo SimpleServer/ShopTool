@@ -297,6 +297,7 @@ If you have any problems you could read the more detailed descriptions above and
 ###Checklist
 * Is `enableEvents=true` in `simpleserver.properties`?
 * Did you try to read the output of ShopTool to get information about what´s wrong?
+* Did you merge the generated code correctly into `config.xml`? Check the SimpleServer console for errors!
 
 ###Bugs
 If you find any bugs in ShopTool, please report them using the Github issue system.
