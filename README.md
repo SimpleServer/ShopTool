@@ -221,10 +221,9 @@ This is simply done with the event command.
 * `dest` path to the file the generated code should be saved to
 * `file n` a correct shop file
 
-The switch `-s` is optional. If given, ShopTool will output the static code which is shared
-by all shops and does not need to change when you generate subsequent shops.
-You will need use that flag just the first time you use ShopTool to get that static event code.
-It contains all the generic shop logic and two new player commands - ``/balance`` and ``/buy``.
+The switch `-s` is optional, it adds the code of `static.xml` to the output.
+If the setup is already done it shouldn´t be used.
+It can be used when generating shops for the first time to do setup and shops in one step.
 
 ###Use generated event code with SimpleServer
 The generated code must be copied into the `<config>` section of your SimpleServer `config.xml`.
