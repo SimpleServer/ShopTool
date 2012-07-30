@@ -107,7 +107,7 @@
           return
         endif
 
-        set '#max '#refill '#interval to #stockconf #id Hget Aexplode
+        set '#refill '#max '#interval to #stockconf #id Hget Aexplode
         set '#hypo #stocklist #id Hget #cnt +
         if #hypo #max gt
           say #PLAYER #RED "This shop can not buy so much now! Come back later!" .
@@ -178,7 +178,7 @@
             set '#key #keys #i Aget
             set '#price #buylist #key Hget
             set '#onstock #stocklist #key Hget
-            set '#max '#refill '#interval to #stockconf #key Hget Aexplode
+            set '#refill '#max '#interval to #stockconf #key Hget Aexplode
 
             say #PLAYER #YELLOW #key getitemalias . #GRAY . "(" .. #onstock . '/ . #max . ")" . " : " . #WHITE . #price . "Credits" ..
 
@@ -283,7 +283,7 @@
         while #i #keys Asize lt
           set '#key #keys #i Aget
           set '#onstock #stocklist #key Hget
-          set '#max '#refill '#interval to #stockconf #key Hget Aexplode
+          set '#refill '#max '#interval to #stockconf #key Hget Aexplode
 
           if #onstock #refill eq
             inc '#i
