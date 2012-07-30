@@ -107,7 +107,7 @@
           return
         endif
 
-        set '#max '#refill '#interval to #stockconf #id Hget Aexplode
+        set '#refill '#max '#interval to #stockconf #id Hget Aexplode
         set '#hypo #stocklist #id Hget #cnt +
         if #hypo #max gt
           say #PLAYER #RED "This shop can not buy so much now! Come back later!" .
@@ -160,27 +160,31 @@
         endif
 
         if #item null eq
-          push #GRAY "/buy item [count]" .
-          push #GRAY "/buy list" .
-          push #GRAY "Usage:" .
-          say #PLAYER #POP
-          say #PLAYER #POP
-          say #PLAYER #POP
+          say #PLAYER #GRAY "Usage:" .
+          say #PLAYER #GRAY "/buy list" .
+          say #PLAYER #GRAY "/buy item [count]" .
           return
         endif
 
         if #item "list" eq
-          push #GRAY "Price list:" .
-          say #PLAYER #POP
+          say #PLAYER #GRAY "Price list:" .
 
           set '#i 0
           while #i #keys Asize lt
             set '#key #keys #i Aget
             set '#price #buylist #key Hget
             set '#onstock #stocklist #key Hget
-            set '#max '#refill '#interval to #stockconf #key Hget Aexplode
+            set '#refill '#max '#interval to #stockconf #key Hget Aexplode
+            
+            set '#CLR #YELLOW
+            if #onstock #max eq
+              set '#CLR #GREEN
+            endif
+            if #onstock 0 eq
+              set '#CLR #RED
+            endif
 
-            say #PLAYER #YELLOW #key getitemalias . #GRAY . "(" .. #onstock . '/ . #max . ")" . " : " . #WHITE . #price . "Credits" ..
+            say #PLAYER #CLR #key getitemalias . #GRAY . "(" .. #WHITE . #onstock . #GRAY . '/ . #max . ")" . " : " . #WHITE . #price . "Credits" ..
 
             inc '#i
           endwhile
@@ -283,7 +287,7 @@
         while #i #keys Asize lt
           set '#key #keys #i Aget
           set '#onstock #stocklist #key Hget
-          set '#max '#refill '#interval to #stockconf #key Hget Aexplode
+          set '#refill '#max '#interval to #stockconf #key Hget Aexplode
 
           if #onstock #refill eq
             inc '#i
