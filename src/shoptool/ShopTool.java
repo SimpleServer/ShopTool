@@ -18,6 +18,8 @@ public class ShopTool {
     public static void main(String[] args) {
         execute(args);
     }
+    private static final String VERSION = "0.x.x Alpha";
+    private static final String HELP_TEXT = "ShopTool version " + VERSION;
     private static final String CMD_HELP = "help";
     private static final String CMD_PRICELIST = "pl";
     private static final String CMD_PRICELIST_SYNTAX = CMD_PRICELIST
@@ -69,6 +71,7 @@ public class ShopTool {
 
     private static boolean execute(String[] args) {
         if (args.length == 0) {
+            cmdHelp();
             return true;
         }
         if (args[0].equals(CMD_PRICELIST)) {
@@ -135,7 +138,7 @@ public class ShopTool {
             }
         } else if (args[0].equals(CMD_HELP)) {
             if (args.length == 1) {
-                logCommands();
+                cmdHelp();
             } else {
                 if (args[1].equals(CMD_PRICELIST)) {
                     log(CMD_PRICELIST_HELP);
@@ -155,6 +158,11 @@ public class ShopTool {
         log("Incorrect number of arguments! Sould be at least " + a + ".");
     }
 
+    private static void cmdHelp() {
+        log(HELP_TEXT);
+        logCommands();
+    }
+    
     private static void logCommands() {
         log("Available commands:");
         log(CMD_PRICELIST_SYNTAX);
