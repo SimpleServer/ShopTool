@@ -28,7 +28,7 @@ public class PriceListItem implements PriceListItemInterface {
     private final static int DEFAULT_STOCK_UPDATE_TIME = 0;
     private String id; //minecraft block id
     private String name; //minecraft block name
-    //prices in relation to base value 10
+    //prices to sell / buy this item - negative values mean it is not available
     private int priceSell;
     private int priceBuy;
     private int normalStock; //amount of items the store tries to have
@@ -200,12 +200,12 @@ public class PriceListItem implements PriceListItemInterface {
 
     @Override
     public boolean isBuy() {
-        return priceBuy != -1;
+        return priceBuy >= 0;
     }
 
     @Override
     public boolean isSell() {
-        return priceSell != -1;
+        return priceSell >= 0;
     }
 
     private void setId(String id) {

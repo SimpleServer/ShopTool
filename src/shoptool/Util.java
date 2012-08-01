@@ -140,6 +140,13 @@ public class Util {
         }
     }
 
+    /**
+     * Convert a key/value(String) pair to String.
+     * Value == 'null' -> ""
+     * @param key
+     * @param value
+     * @return 
+     */
     public static String svalToStr(String key, String value) {
         if (value == null) {
             return valToStr(key, "");
@@ -147,8 +154,15 @@ public class Util {
         return valToStr(key, value);
     }
 
+    /**
+     * Convert a key/value(int) pair to String.
+     * Negative value -> ""
+     * @param key
+     * @param value
+     * @return 
+     */
     public static String ivalToStr(String key, int value) {
-        if (value == -1) {
+        if (value < 0) {
             return valToStr(key, "");
         }
         return valToStr(key, Integer.toString(value));
