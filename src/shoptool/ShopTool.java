@@ -18,7 +18,7 @@ public class ShopTool {
     public static void main(String[] args) {
         execute(args);
     }
-    private static final String VERSION = "1.0.0 Beta";
+    private static final String VERSION = "1.0.1 Beta";
     private static final String HELP_TEXT = "ShopTool version " + VERSION;
     private static final String CMD_HELP = "help";
     private static final String CMD_PRICELIST = "pl";
