@@ -151,6 +151,7 @@
         run storeUpdateStock #area
 
         set '#buylist $store_listBuy #area Hget
+        set '#selllist $store_listSell #area Hget
         set '#stocklist $store_listStock #area Hget
         set '#stockconf $store_stockConf #area Hget
         set '#keys #buylist Hkeys
@@ -162,17 +163,34 @@
         if #item null eq
           say #PLAYER #GRAY "Usage:" .
           say #PLAYER #GRAY "/buy list" .
-          say #PLAYER #GRAY "/buy item [count]" .
+          say #PLAYER #GRAY "/buy selllist" .
+          say #PLAYER #GRAY "/buy ITEM [count]" .
           return
         endif
 
-        if #item "list" eq
-          say #PLAYER #GRAY "Price list:" .
+        if #item "list" eq #item "selllist" eq or
+          if #item "list" eq
+            set '#buy 1
+            set '#iterator #keys
+          else
+            set '#buy 0
+            set '#iterator #selllist Hkeys
+          endif
+
+          if #buy
+            say #PLAYER #GRAY "Buy price list:" .
+          else
+            say #PLAYER #GRAY "Sell price list:" .
+          endif
 
           set '#i 0
-          while #i #keys Asize lt
-            set '#key #keys #i Aget
-            set '#price #buylist #key Hget
+          while #i #iterator Asize lt
+            set '#key #iterator #i Aget
+            if #buy
+              set '#price #buylist #key Hget
+            else
+              set '#price #selllist #key Hget
+            endif
             set '#onstock #stocklist #key Hget
             set '#refill '#max '#interval to #stockconf #key Hget Aexplode
             
