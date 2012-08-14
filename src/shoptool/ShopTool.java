@@ -18,7 +18,7 @@ public class ShopTool {
     public static void main(String[] args) {
         execute(args);
     }
-    private static final String VERSION = "1.0.1 Beta";
+    private static final String VERSION = "1.0.2 Beta";
     private static final String HELP_TEXT = "ShopTool version " + VERSION;
     private static final String CMD_HELP = "help";
     private static final String CMD_PRICELIST = "pl";
@@ -162,7 +162,7 @@ public class ShopTool {
         log(HELP_TEXT);
         logCommands();
     }
-    
+
     private static void logCommands() {
         log("Available commands:");
         log(CMD_PRICELIST_SYNTAX);
@@ -199,12 +199,12 @@ public class ShopTool {
                 err(e.getMessage());
             }
         }
-        
+
         if (shops.isEmpty()) {
             warn("None of the specified shops could be created - nothing to do!");
             return;
         }
-        
+
         String events = EventGenerator.generateShops(shops, withstatic);
         info("Successfully generated events!");
         //save events to file

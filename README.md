@@ -1,6 +1,6 @@
 ShopTool
 ========
-Version 1.0.1 Beta
+Version 1.0.2 Beta
 
 Copyright (C) 2012 Felix Wiemuth, Anton Pirogov
 
