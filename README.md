@@ -81,7 +81,7 @@ Each line in a `.pricelist` file represents one item. A line (with all keys used
 * `TIME` time interval in seconds it takes to change the current stock by one item towards 'NORMAL'
 
 *Note:* Leaving out a price means that this item is not available for selling or buying.
-Use this feature to make some items only available for purchase and orhers only for selling.
+Use this feature to make some items only available for purchase and others only for selling.
 
 *Note:* Not all of these keys must be given - if something is left out, default values are used
 (either those specified in commands or internal defaults).
