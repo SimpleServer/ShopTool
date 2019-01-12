@@ -74,7 +74,7 @@ Each line in a `.pricelist` file represents one item. A line (with all keys used
 * `ID` the block id of the minecraft item (see <http://www.minecraftwiki.net/wiki/Item_id> for information on IDs)
 * `NAME` [opt.] an alias for the item - this is only for convenience in the text files and currently not used by ShopTool or SimpleServer
 * `PRICE_BUY` the price you have to pay for buying an item of this type
-* `PRICE_SELL` the amout you get for selling an item of this type
+* `PRICE_SELL` the about you get for selling an item of this type
 * `PRICE` can be used instead of `PRICE_BUY` and `PRICE_SELL` indicating the price for both
 * `NORMAL` the amount of items the shop tends to have (the stock is changing towards this amount while time passes)
 * `MAX` the maximum of items the shop can hold - this means you cannot sell infinitely
