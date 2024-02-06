@@ -4,7 +4,7 @@ Version 1.0.2 Beta
 
 Copyright (C) 2012 Felix Wiemuth, Anton Pirogov
 
-##License
+## License
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
@@ -18,14 +18,14 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-##Description
+## Description
 ShopTool is a tool for [SimpleServer](https://github.com/SimpleServer/SimpleServer)
 to create Minecraft in-game shops based on SimpleServer *Events*.
 The result is a vendor bot showing up in the world with whom can be interacted.
 In fact the user in a first step creates *pricelists* to be able to create shops from these
 lists in a second step. To get started you can refer to the *Quickstart guide* below.
 
-##Setup: Preperations to use the shop system with SimpleServer
+## Setup: Preperations to use the shop system with SimpleServer
 Since the shop system is implemented via events,
 first make sure that the `enableEvents` flag in `simpleserver.properties` is set to `true`.
 Now the server needs additional code which is located in the `static.xml` file that comes with ShopTool.
@@ -34,14 +34,14 @@ of SimpleServers `config.xml`.
 If you already have a `onServerStart` event, just add the line `launch storeBotsRestartService`
 to initialize the shops and delete the copied `onServerStart` event.
 
-##Usage
+## Usage
 <!--- TODO
 *If you are a (Windows) user who doesn´t know how to deal with the
 command line or how to edit text files with extensions other than
 ".txt" you may want to consult this tutorial before using ShopTool:*
 -->
 
-###General
+### General
 ShopTool is a command-line program that works by passing commands with options and arguments.
 You can run the program by executing
 
@@ -57,7 +57,7 @@ command line or how to edit text files with extensions other than
 
 
 
-###Basic steps
+### Basic steps
 To create a shop for your Minecraft SimpleServer server you have to follow these steps
 
 1. Create a pricelist
@@ -65,7 +65,7 @@ To create a shop for your Minecraft SimpleServer server you have to follow these
 3. Create event code from a shop file
 4. Put event code into SimpleServer´s `config.xml` file
 
-###Pricelists
+### Pricelists
 Pricelists are files containing entries with items to be bought and sold.
 Each line in a `.pricelist` file represents one item. A line (with all keys used) may look like this:
 
@@ -190,7 +190,7 @@ Result: `mix2.pricelist`
     ID=265 NAME=iron PRICE_BUY=11250 PRICE_SELL=10125 NORMAL=20 MAX=64 TIME=30
     ID=264 NAME=diamond PRICE_BUY=2250000 PRICE_SELL=2025000 NORMAL=20 MAX=64 TIME=30
 
-###Shop(file)s
+### Shop(file)s
 You don´t actually define shops with ShopTool. Shops are simply built by a file containing the following information:
 
     NAME=MyShop
@@ -210,7 +210,7 @@ You don´t actually define shops with ShopTool. Shops are simply built by a file
 
 *Note:* The keys (words in capital letters until the equal sign) must occur exactly in the shown order and one key per line.
 
-###Shop events
+### Shop events
 To use a shop with SimpleServer the script code for SimpleServer *Events* must be generated.
 This is simply done with the event command.
 
@@ -225,7 +225,7 @@ The switch `-s` is optional, it adds the code of `static.xml` to the output.
 If the setup is already done it shouldn´t be used.
 It can be used when generating shops for the first time to do setup and shops in one step.
 
-###Use generated event code with SimpleServer
+### Use generated event code with SimpleServer
 The generated code must be copied into the `<config>` section of your SimpleServer `config.xml`.
 The generated areas have to be manually merged with your own areas.
 To do so, move the content of the generated `<dimension>` section into your own.
@@ -235,7 +235,7 @@ after starting the server and you can test your shops.
 Just follow the in-game instructions when entering a shop area
 or see the [SimpleServer wiki](https://github.com/SimpleServer/SimpleServer/wiki/Npcshops).
 
-##Quickstart guide
+## Quickstart guide
 This will give a quick overview of how creating shops works.
 We won´t cover the useful `pricelist` command here, see above for that!
 
@@ -249,7 +249,7 @@ Let´s create a shop! We start by searching or building a good place in our Mine
 
 For this tutorial we assume all files created and needed to be in the same directory as the `ShopTool.jar` file.
 
-###The pricelist
+### The pricelist
 Now we need to say what we want to sell and buy in our shop and how much it should cost. That´s where pricelists come into play.
 We have two options: create our pricelist manually or generate it from existing ones.
 We will do it manually here, but note that the *pricelist command* is quite useful to make creating pricelists convenient.
@@ -264,7 +264,7 @@ If the shop should sell iron ingots for 500, buy them for 400 and buy birch wood
 
 We also stated that the shop should normally have 12 iron ingots available, can store a maximum of 20 and updates its stock towards 12 every 400 seconds. The same applies for the second entry respectively.
 
-###The shop file
+### The shop file
 It´s time to create our shop file which contains the general information about our shop by
 writing the following lines into a new file `myshop.shop`.
 
@@ -277,7 +277,7 @@ writing the following lines into a new file `myshop.shop`.
 
 We replace the coordinates with the ones we wrote down before.
 
-###Final steps
+### Final steps
 Now lets create the code for our shop by executing
 
     ev code.xml myshop.shop
@@ -291,9 +291,9 @@ Just follow the in-game instructions!
 
 If you have any problems you could read the more detailed descriptions above and refer to the *troubleshooting* section below.
 
-##Troubleshooting
+## Troubleshooting
 
-###Checklist
+### Checklist
 * Is `enableEvents=true` in `simpleserver.properties`?
 * Did you try to read the output of ShopTool to get information about what´s wrong?
 * Did you merge the generated code correctly into `config.xml`? Check the SimpleServer console for errors!
@@ -301,13 +301,13 @@ If you have any problems you could read the more detailed descriptions above and
 If you still have problems, you can consult the ShopTool forum page (see "Qustions and comments")
 to look for solutions or ask questions!
 
-##Feedback
+## Feedback
 We´d like to know how you like ShopTool and if you have any suggestions to improve it.
 
-###Bugs
+### Bugs
 If you find any bugs in ShopTool, please report them using the Github issue system.
 
-###Questions and comments
+### Questions and comments
 Visit the [ShopTool forum page](http://www.minecraftforum.net/topic/1380109-simpleserver-shoptool/) at the *Minecraft forums*
 to ask questions, discuss features or leave comments!
 
